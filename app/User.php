@@ -36,4 +36,38 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Belongs To a Role
+     */
+    public function role()
+    {
+        return $this->belongsTo('App\Uavsms\UserRole\Role');
+    }
+
+    /**
+     * Get User Permissions
+     */
+    public function getPermissions()
+    {
+        if ($this->permissions !== null) {
+            return $this->permissions;
+        } else {
+            $this->permissions = $this->role->permissionsToList();
+        }
+
+        return $this->permissions;
+    }
+
+    /**
+     * Has Role Permissions
+     */
+    public function hasPermission($permission)
+    {
+        if (in_array($permission, $this->getPermissions())) {
+            return true;
+        }
+
+        return false;
+    }
 }
