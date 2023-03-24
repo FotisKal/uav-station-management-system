@@ -17,9 +17,9 @@ class UsersTableSeeder extends Seeder
     {
         $data = [
             [
-            'role' => 'administrator',
+            'role_id' => '1',
             'name' => 'Fotis Kal',
-            'email' => 'f.kalokiris@m-stat.gr',
+            'email' => 'f.kalokiris@example.gr',
             'msisdn' => '306900000005',
             'email_verified_at' => date('Y-m-d H:i:s'),
             'password' => 'demo1234',
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
 
         foreach ($data as $v) {
             $user = new User();
-            $user->role = $v['role'];
+            $user->role_id = $v['role_id'];
             $user->name = $v['name'];
             $user->email = $v['email'];
             $user->msisdn = $v['msisdn'];
