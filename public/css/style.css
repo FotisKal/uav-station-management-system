@@ -309,6 +309,11 @@ code {
   color: #ffffff;
   text-decoration: none; }
 
+.debug{
+    font-family: monospace;
+    word-wrap: break-word;
+}
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -321,7 +326,7 @@ code {
   overflow-x: hidden;
   overflow-y: auto;
   /* Scrollable contents if viewport is shorter than content. */
-  background: #7376df; }
+  background: #444444/*7376df*/; }
   .sidebar a {
     color: #ffffff;
     text-transform: uppercase;
