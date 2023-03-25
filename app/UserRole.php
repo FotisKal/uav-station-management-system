@@ -2,42 +2,58 @@
 
 namespace App;
 
+use App\Uavsms\UserRole\Permission;
+
 class UserRole
 {
-    const ADMINISTRATOR = 1;
+    const ADMINISTRATOR_ID = 1;
 
-    const UAV_USER = 100;
+    const SIMPLE_USER_ID = 100;
+
+    const ADMINISTRATOR = 'administrator';
+
+    const SIMPLE_USER = 'simple_user';
+
+    const ADMINISTRATOR_TITLE = 'Administrator';
+
+    const SIMPLE_USER_TITLE = 'UAV User';
+
+    const SIMPLE_USERS_TITLE = 'UAV Users';
+
+    const ADMINISTRATORS_TITLE = 'Administrators';
+
+    const ALL_USERS_TITLE = 'All Users';
 
     /**
      * Roles
      */
     public static $roles = [
-        'administrator' => [
-            'title' => 'Administrator',
-            'id' => 1,
+        self::ADMINISTRATOR => [
+            'title' => self::ADMINISTRATOR_TITLE,
+            'id' => self::ADMINISTRATOR_ID,
             'locked' => true,
             'permissions' => [
-                'administrator',
-                'can_access_panel',
-                'can_view_roles',
-                'can_manage_roles',
-                'can_view_users',
-                'can_manage_users',
-                'can_view_content',
-                'can_manage_content',
-                'can_view_dynamic_variables',
-                'can_manage_dynamic_variables',
-                'can_view_file_manager',
-                'can_view_fishing_sessions',
-                'can_manage_fishing_sessions',
+                Permission::ADMINISTRATION,
+                Permission::CAN_ACCESS_PANEL,
+                Permission::CAN_VIEW_ROLES,
+                Permission::CAN_MANAGE_ROLES,
+                Permission::CAN_VIEW_USERS,
+                Permission::CAN_MANAGE_USERS,
+                Permission::CAN_VIEW_CONTENT,
+                Permission::CAN_MANAGE_CONTENT,
+                Permission::CAN_VIEW_DYNAMIC_VARIABLES,
+                Permission::CAN_MANAGE_DYNAMIC_VARIABLES,
+                Permission::CAN_VIEW_FILE_MANAGER,
+                Permission::CAN_VIEW_SESSIONS,
+                Permission::CAN_MANAGE_SESSIONS,
             ],
         ],
-        'mobile_user' => [
-            'title' => 'Mobile User',
-            'id' => 100,
+        self::SIMPLE_USER => [
+            'title' => self::SIMPLE_USER_TITLE,
+            'id' => self::SIMPLE_USER_ID,
             'locked' => true,
             'permissions' => [
-                'mobile_user',
+                Permission::SIMPLE_USER,
             ],
         ],
     ];
@@ -45,15 +61,15 @@ class UserRole
     /**
      * To List
      */
-    public static function toList($manager = '')
+    public static function toList()
     {
         $user_roles = [];
-        if (Auth::user()->role_id == 1) {
+        if (Auth::user()->role_id == self::ADMINISTRATOR_ID) {
             foreach (self::$roles as $role_id => $role) {
                 $user_roles[$role_id] = $role['title'];
             }
         } else {
-            $user_roles[self::UAV_USER] = self::$roles[self::UAV_USER]['title'];
+            $user_roles[self::SIMPLE_USER_ID] = self::$roles[self::SIMPLE_USER_ID]['title'];
         }
         return $user_roles;
     }
