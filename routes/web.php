@@ -28,3 +28,5 @@ Route::group(['middleware' => [
         Route::get('/dashboard', 'HomeController@index')->name('home');
     });
 });
+
+Route::get('tools/per-page/{per_page}', 'ToolsController@perPage');

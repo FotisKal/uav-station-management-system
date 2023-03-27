@@ -20,3 +20,7 @@ $(document).ready(function(){
         (sidebar_icon.attr("class") === opt_1) ? sidebar_icon.attr("class", opt_2) : sidebar_icon.attr("class", opt_1);
     }, 1000);
 });
+
+$('#per_page').change(function(ev) {
+    window.location.href = BASE_URL + '/tools/per-page/' + $('#per_page').val();
+});

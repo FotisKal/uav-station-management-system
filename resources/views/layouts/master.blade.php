@@ -21,6 +21,10 @@
         <!-- Custom styles for this template -->
         <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
+        <script type="text/javascript">
+            var BASE_URL = '{{ url('/') }}';
+        </script>
+
     </head>
     <body>
         <div class="container-fluid" id="wrapper">
