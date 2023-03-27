@@ -26,6 +26,12 @@ Route::group(['middleware' => [
     Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_ACCESS_PANEL]], function () {
 
         Route::get('/dashboard', 'HomeController@index')->name('home');
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_ACCESS_PANEL]], function () {
+
+            Route::get('/admin-users', 'UserController@index');
+            Route::post('/admin-users/search', 'UserController@search');
+        });
     });
 });
 
