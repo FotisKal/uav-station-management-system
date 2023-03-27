@@ -17,45 +17,53 @@ class MainMenu
     |
     */
 
+    const DASHBOARD = 'dashboard';
+
+    const USERS = 'users';
+
+    const ADMINS = 'admins';
+
+    const SIMPLE_USERS = 'simple_users';
+
     /**
      * Menu Items
      */
     public static $menu_items = [
-      'dashboard' => [
-          'icon' => 'fa-dashboard',
-          'title' => 'Dashboard',
-          'url' => '/dashboard',
-          'permissions' => [
-              Permission::CAN_ACCESS_PANEL,
-          ],
-          'sub_items' => [],
-      ],
-      'users' => [
-          'icon' => 'fa-users',
-          'title' => UserRole::ALL_USERS_TITLE,
-          'url' => '#',
-          'permissions' => [
-              Permission::CAN_VIEW_ROLES,
-          ],
-          'sub_items' => [
-              'admins' => [
-                  'icon' => 'fa-user',
-                  'title' => UserRole::ADMINISTRATORS_TITLE,
-                  'url' => '/admin-users',
-                  'permissions' => [
-                      Permission::CAN_VIEW_USERS,
-                  ],
-              ],
-              'simple_users' => [
-                  'icon' => 'fa-rss',
-                  'title' => UserRole::SIMPLE_USERS_TITLE,
-                  'url' => '/uav-users',
-                  'permissions' => [
-                      Permission::CAN_VIEW_USERS,
-                  ],
-              ],
-          ],
-      ],
+        self::DASHBOARD => [
+            'icon' => 'fa-dashboard',
+            'title' => 'Dashboard',
+            'url' => '/dashboard',
+            'permissions' => [
+                Permission::CAN_ACCESS_PANEL,
+            ],
+            'sub_items' => [],
+        ],
+        self::USERS => [
+            'icon' => 'fa-users',
+            'title' => UserRole::ALL_USERS_TITLE,
+            'url' => '#',
+            'permissions' => [
+                Permission::CAN_VIEW_ROLES,
+            ],
+            'sub_items' => [
+                self::ADMINS => [
+                    'icon' => 'fa-user',
+                    'title' => UserRole::ADMINISTRATORS_TITLE,
+                    'url' => '/admin-users',
+                    'permissions' => [
+                        Permission::CAN_VIEW_USERS,
+                    ],
+                ],
+                self::SIMPLE_USERS => [
+                    'icon' => 'fa-rss',
+                    'title' => UserRole::SIMPLE_USERS_TITLE,
+                    'url' => '/uav-users',
+                    'permissions' => [
+                        Permission::CAN_VIEW_USERS,
+                    ],
+                ],
+            ],
+        ],
     ];
 
     /**
