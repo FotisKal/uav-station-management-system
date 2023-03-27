@@ -28,6 +28,7 @@
                 @include('layouts.partials.sidebar')
                 <main class="col-xs-12 col-sm-8 col-lg-9 col-xl-10 pt-3 pl-4 ml-auto">
                     @include('layouts.partials.header')
+                    @include('layouts.partials.breadcrumbs')
                     @yield('content')
                     @include('layouts.partials.stats')
                 </main>
