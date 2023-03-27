@@ -24,3 +24,15 @@ $(document).ready(function(){
 $('#per_page').change(function(ev) {
     window.location.href = BASE_URL + '/tools/per-page/' + $('#per_page').val();
 });
+
+$('.confirm').click(function(ev) {
+    var message = $(this).data('confirm-message');
+
+    if (message == null) {
+        message = 'Are you sure?';
+    }
+
+    if (!confirm(message)) {
+        ev.preventDefault();
+    }
+});
