@@ -6,50 +6,40 @@
     <a href="#menu-toggle" class="btn btn-default" id="menu-toggle"><em class="fa fa-bars"></em></a>
     <ul class="nav nav-pills flex-column sidebar-nav">
 
-        @foreach(\App\Core\Utilities\MainMenu::getPermissibleMenu() as $item)
+        @foreach(\App\Core\Utilities\MainMenu::getPermissibleMenu() as $key => $item)
             @if (count($item['sub_items']) > 0)
-                <div class="pos-f-t">
-                    <div class="nav-item">
-                        <a class="nav-link navbar-toggler dropdown-toggle" href="#" type="button" data-toggle="collapse"
-                           data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-                           aria-expanded="false" aria-label="Toggle navigation">
-                            <em class="fa {{ $item['icon'] }}"></em> {{ __($item['title']) }}
-                            <span class="sr-only"></span>
-                        </a>
-                    </div>
-                    <div class="collapse" id="navbarToggleExternalContent">
-                        <div class="bg-dark p-4">
-                            <ul class="nav nav-pills flex-column sidebar-nav">
-                                <li class="nav-item">
+                <li class="parent nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#sub-item-{{ array_key_first($item['sub_items']) }}">
+                        <em class="fa {{ $item['icon'] }}">&nbsp;</em> {{ __($item['title']) }}
+                        <span data-toggle="collapse" href="#sub-item-{{ array_key_first($item['sub_items']) }}"
+                              class="icon pull-right">
+                            <i class="fa fa-plus fa-{{ (array_key_exists($selected_menu, $item['sub_items'])) ? 'minus' : 'plus' }}"></i>
+                        </span>
+                    </a>
 
-                                    @foreach($item['sub_items'] as $sub_item)
-                                            <a class="nav-link" href="{{ url($sub_item['url']) }}" type="button">
-                                                <em class="fa {{ $sub_item['icon'] }}"></em>
-                                                <span class="text-muted"> {{ __($sub_item['title']) }} </span>
-                                                <span class="sr-only"></span>
-                                            </a>
-                                    @endforeach
+                    <ul class="children collapse {{ (array_key_exists($selected_menu, $item['sub_items'])) ? 'show' : '' }}"
+                        id="sub-item-{{ array_key_first($item['sub_items']) }}" style="">
 
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                        @foreach($item['sub_items'] as $sub_key => $sub_item)
+                            <li class="nav-item">
+                                <a class="nav-link {{ ($selected_menu == $sub_key) ? 'active' : '' }}"
+                                   href="{{ url($sub_item['url']) }}">
+                                    <em class="fa {{ $sub_item['icon'] }}"></em> {{ __($sub_item['title']) }}
+                                </a>
+                            </li>
+                        @endforeach
+
+                    </ul>
+                </li>
             @else
                 <li class="nav-item">
-                    <a class="nav-link
-                        @php
-
-                        echo(!isset($is_selected) ? 'active' : null)
-
-                        @endphp
+                    <a class="nav-link {{ ($selected_menu == $key) ? 'active' : '' }}
                         " href="{{ url($item['url']) }}">
-                        <em class="fa fa-dashboard"></em> {{ $item['title'] }} <span class="sr-only">(current)</span>
+                        <em class="fa {{ $item['icon'] }}"></em> {{ $item['title'] }} <span class="sr-only">(current)</span>
                     </a>
                 </li>
             @endif
         @endforeach
 
     </ul>
-{{--    <a href="login.html" class="logout-button"><em class="fa fa-power-off"></em> Signout</a>--}}
 </nav>
