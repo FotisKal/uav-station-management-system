@@ -70,4 +70,31 @@ class User extends Authenticatable
 
         return false;
     }
+
+    /**
+     * Scope Filter
+     */
+    public function scopeFilter($query, $search)
+    {
+        if (!empty($search['email'])) {
+            $query->where('email', 'LIKE', '%' . $search['email'] . '%');
+        }
+
+        if (!empty($search['full_name'])) {
+            $query->where('name', 'LIKE', '%' . $search['full_name'] . '%');
+        }
+
+        if (!empty($search['mobile_phone'])) {
+            $query->where('msisdn', 'LIKE', '%' . $search['mobile_phone'] . '%');
+        }
+
+        if (!empty($search['search'])) {
+            $query->where('id', is_numeric($search['search']) ? $search['search'] : -1)
+                ->orWhere('email', 'LIKE', '%' . $search['search'] . '%')
+                ->orWhere('name', 'LIKE', '%' . $search['search'] . '%')
+                ->orWhere('msisdn', 'LIKE', '%' . $search['search'] . '%');
+        }
+
+        return $query;
+    }
 }
