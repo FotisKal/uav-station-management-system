@@ -19,3 +19,14 @@ function show_stats() {
 
     return $ret;
 }
+
+/**
+ * Delete Form
+ */
+function delete_form($url, $btn_class = 'btn btn-secondary margin') {
+    return '<form action="' . e($url) . '"method="POST">'
+        . csrf_field()
+        . method_field('DELETE')
+        . '<button type="submit" class="' . $btn_class . ' confirm"><span class="fa fa-trash"></span> &nbsp;Delete</button>'
+        . '</form>';
+}
