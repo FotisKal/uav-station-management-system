@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Core\Utilities\MainMenu;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('layouts.master');
+        return view('layouts.master', [
+            'page_title' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+            'selected_menu' => MainMenu::DASHBOARD,
+        ]);
     }
 }
