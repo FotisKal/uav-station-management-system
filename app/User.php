@@ -2,9 +2,13 @@
 
 namespace App;
 
+use App\Core\Utilities\DateFormat;
+use App\Core\Utilities\DatetimeFormat;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
+use Validator;
 
 class User extends Authenticatable
 {
@@ -96,5 +100,65 @@ class User extends Authenticatable
         }
 
         return $query;
+    }
+
+    /**
+     * Validation
+     */
+    public function validation($request, $id = null, $action = '')
+    {
+        $rules = [
+            'email' => [
+                'required',
+                'email',
+                'max:20',
+                Rule::unique('users')->ignore($id),
+            ],
+            'full_name' => 'max:50',
+            'mobile_phone' => [
+                'required',
+                'integer',
+            ],
+            'date_format' => [
+                'required',
+                'in:' . implode(',', DateFormat::$formats),
+            ],
+            'datetime_format' => [
+                'required',
+                'in:' . implode(',', DatetimeFormat::$formats),
+            ],
+            'password' => [
+                Rule::requiredIf($action == 'create'),
+                'confirmed',
+                'min:8',
+                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            ],
+        ];
+
+        $messages = [
+            'email' => __('Invalid e-mail address.'),
+            'email.required' => __('The e-mail address can\'t be empty'),
+            'email.max' => __('The e-mail address can\'t be longer than 20 characters.'),
+            'email.unique' => __('The e-mail address is already taken.'),
+
+            'full_name.max' => __('The Full Name can\'t be longer than 20 characters.'),
+
+            'mobile_phone.required' => __('The Mobile Phone can\'t be empty'),
+            'mobile_phone.integer' => __('The Mobile Phone must be a number'),
+
+            'date_format.required' => __('The Date Format can\'t be empty'),
+            'date_format.in' => __('Invalid Date Format'),
+
+            'datetime_format.required' => __('The Date Format can\'t be empty'),
+            'datetime_format.in' => __('Invalid Date Format'),
+
+            'password.required_if' => __('The Password can\'t be empty'),
+            'password.confirmed' => __('The new Password does\'t match with the confirmation Password'),
+            'password.min' => __('The Password must be longer than 7 characters.'),
+            'password.regex' => __('The Password must contain characters from at least three of the following five
+            categories: (A – Z), (a – z), (0 – 9), Non-alphanumeric, Unicode characters'),
+        ];
+
+        return Validator::make($request->all(), $rules, $messages);
     }
 }

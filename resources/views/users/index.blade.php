@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-lg-6 mb-sm-4 mb-lg-0">
             @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
-                <a href="{{ url('/users/create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ __('Add New User') }} </a>
+                <a href="{{ url('/admin-users/create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ __('Add New User') }} </a>
             @endif
         </div>
         <div class="col-lg-6 mb-sm-4 mb-lg-0">

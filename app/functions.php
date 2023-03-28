@@ -30,3 +30,41 @@ function delete_form($url, $btn_class = 'btn btn-secondary margin') {
         . '<button type="submit" class="' . $btn_class . ' confirm"><span class="fa fa-trash"></span> &nbsp;Delete</button>'
         . '</form>';
 }
+
+/**
+ * Select box
+ */
+function selectbox($name, $id, $data, $selected_value, $more_attributes = '', $more_classes = '') {
+    $out = '<select name="' . $name . '" id="' . $id . '" class="custom-select form-control ' . $more_classes . '" ' . $more_attributes . '>' . chr(10);
+
+    if (count($data) > 0) {
+        foreach ($data as $k => $v) {
+            $out .= '<option value="' . e($k) . '"';
+            if ($k == $selected_value) $out .= ' selected="selected"';
+            $out .= '>' . e($v) . '</option>' . chr(10);
+        }
+    }
+
+    $out .= '</select>' . chr(10);
+
+    return $out;
+}
+
+/**
+ * Errors' Form
+ */
+function errors_form($errors, $field) {
+    $out = '';
+
+    if ($errors->has($field)) {
+        $out .= '<div class="invalid-feedback">';
+
+        foreach ($errors->get($field) as $error) {
+            $out .= ' ' . e(__($error)) . '<br>';
+        }
+
+        $out .= '</div>';
+    }
+
+    return $out;
+}

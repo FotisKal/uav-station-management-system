@@ -32,6 +32,13 @@ Route::group(['middleware' => [
             Route::get('/admin-users', 'UserController@index');
             Route::post('/admin-users/search', 'UserController@search');
         });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS]], function () {
+
+            Route::get('/admin-users/create', 'UserController@create');
+            Route::post('/admin-users', 'UserController@store');
+
+        });
     });
 });
 
