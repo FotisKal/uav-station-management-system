@@ -44,7 +44,9 @@
 
                         @foreach ($users as $user)
                             <tr>
-                                <td>{{ $user->email }}</td>
+                                <td>
+                                    <a href="{{ url('/admin-users/' . $user->id . '/view') }}">{{ $user->email }}</a>
+                                </td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->msisdn }}</td>
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
@@ -69,14 +71,17 @@
             <div class="row my-5">
                 <div class="text-left col-lg-6 col-md-12">
                     @if (count($users) > 0)
-                        {!! sprintf(__('Showing <strong>%s</strong> of <strong>%s</strong> total results'), $users->count(), $users->total()) !!}
+                        {!!
+                            sprintf(__('Showing <strong>%s</strong> of <strong>%s</strong> total results'),
+                            $users->count(), $users->total())
+                        !!}
                     @endif
                 </div>
                 <div class="text-right col-lg-6 col-md-12">
                     <div class="float-right text-left">
                         {!!
-                        \App\Core\Utilities\PerPage::selectbox('per_page', 'per_page',
-                        \App\Core\Utilities\PerPage::$allowed, \App\Core\Utilities\PerPage::get())
+                            \App\Core\Utilities\PerPage::selectbox('per_page', 'per_page',
+                            \App\Core\Utilities\PerPage::$allowed, \App\Core\Utilities\PerPage::get())
                         !!}
                     </div>
                     <div class="float-right mr-4">

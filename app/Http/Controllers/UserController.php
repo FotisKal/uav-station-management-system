@@ -72,6 +72,30 @@ class UserController extends Controller
     }
 
     /**
+     * View View
+     */
+    public function view($id)
+    {
+        $user = User::find($id);
+
+        if ($user == null) {
+            return back();
+        }
+
+        return view('users.view', [
+            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/admin-users' => UserRole::ADMINISTRATORS_TITLE,
+                '/admin-users/' . $id . '/view' => $user->email,
+            ],
+            'selected_menu' => MainMenu::ADMINS,
+            'selected_nav' => 'view',
+            'user' => $user,
+        ]);
+    }
+
+    /**
      * Store new User
      */
     public function store(Request $request)
