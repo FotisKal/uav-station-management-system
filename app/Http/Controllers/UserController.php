@@ -31,6 +31,7 @@ class UserController extends Controller
                 '/admin-users' => UserRole::ADMINISTRATORS_TITLE,
             ],
             'selected_menu' => MainMenu::ADMINS,
+            'token' => $token,
             'users' => $users,
         ]);
     }

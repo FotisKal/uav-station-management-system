@@ -80,7 +80,7 @@
                         !!}
                     </div>
                     <div class="float-right mr-4">
-                        {{ $users->appends($token ?? '' != null ? ['token' => $token ?? ''] : [])->links() }}
+                        {{ $users->appends(!empty($token) ? ['token' => $token] : [])->links() }}
                     </div>
                 </div>
             </div>
