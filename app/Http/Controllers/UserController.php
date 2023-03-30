@@ -101,7 +101,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = new User();
-        $validator = $user->validation($request, null, 'create');
+        $validator = $user->validation($request, 'create');
 
         if ($validator->fails()) {
             $alerts[] = [

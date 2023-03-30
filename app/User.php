@@ -105,13 +105,13 @@ class User extends Authenticatable
     /**
      * Validation
      */
-    public function validation($request, $id = null, $action = '')
+    public function validation($request, $action = '', $id = null)
     {
         $rules = [
             'email' => [
                 'required',
                 'email',
-                'max:20',
+                'max:320',
                 Rule::unique('users')->ignore($id),
             ],
             'full_name' => 'max:50',
