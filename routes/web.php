@@ -48,6 +48,8 @@ Route::group(['middleware' => [
             Route::get('/admin-users/{user_id}/edit', 'UserController@edit');
             Route::put('/admin-users/{user_id}', 'UserController@save');
 
+            Route::delete('/admin-users/{user_id}', 'UserController@delete');
+
         });
     });
 });

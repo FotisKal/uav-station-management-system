@@ -57,7 +57,7 @@
                                         </button>
                                     </td>
                                     <td>
-                                        {!! delete_form(url('users/' . $user->id)) !!}
+                                        {!! delete_form(url('admin-users/' . $user->id)) !!}
                                     </td>
                                 @endif
                             </tr>

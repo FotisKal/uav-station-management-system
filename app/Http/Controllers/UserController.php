@@ -213,4 +213,27 @@ class UserController extends Controller
             'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * Delete User
+     */
+    public function delete($id)
+    {
+        $user = User::find($id);
+
+        if ($user == null) {
+            return back();
+        }
+
+        $user->delete();
+
+        $alerts[] = [
+            'message' => __('User successfully deleted.'),
+            'class' => __('alert bg-warning'),
+        ];
+
+        return redirect('/admin-users')->with([
+            'alerts' => $alerts,
+        ]);
+    }
 }
