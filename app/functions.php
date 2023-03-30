@@ -53,11 +53,11 @@ function selectbox($name, $id, $data, $selected_value, $more_attributes = '', $m
 /**
  * Errors' Form
  */
-function errors_form($errors, $field) {
+function errors_form($errors, $field, $more_classes = '') {
     $out = '';
 
     if ($errors->has($field)) {
-        $out .= '<div class="invalid-feedback">';
+        $out .= '<div class="invalid-feedback ' . $more_classes . '">';
 
         foreach ($errors->get($field) as $error) {
             $out .= ' ' . e(__($error)) . '<br>';

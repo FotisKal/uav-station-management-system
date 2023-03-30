@@ -32,11 +32,11 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>{{ __('Email') }}</th>
-                                <th>{{ __('Full name') }}</th>
-                                <th>{{ __('Mobile Phone') }}</th>
+                                <th> {{ __('Email') }} </th>
+                                <th> {{ __('Full name') }} </th>
+                                <th> {{ __('Mobile Phone') }} </th>
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
-                                    <th colspan="2" class="">{{ __('Actions') }}</th>
+                                    <th colspan="2" class=""> {{ __('Actions') }} </th>
                                 @endif
                             </tr>
                         </thead>
@@ -45,14 +45,14 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td>
-                                    <a href="{{ url('/admin-users/' . $user->id . '/view') }}">{{ $user->email }}</a>
+                                    <a href="{{ url('/admin-users/' . $user->id . '/view') }}"> {{ $user->email }} </a>
                                 </td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->msisdn }}</td>
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"
-                                                onclick="{{ url('/users/' . $user->id . '/edit') }}">
+                                                onclick="window.location.href='{{ url('/admin-users/' . $user->id . '/edit') }}'">
                                             <span class="fa fa-edit"></span>&nbsp;{{ __('Edit') }}
                                         </button>
                                     </td>

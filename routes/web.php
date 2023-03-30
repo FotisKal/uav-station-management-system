@@ -45,6 +45,9 @@ Route::group(['middleware' => [
             Route::get('/admin-users/create', 'UserController@create');
             Route::post('/admin-users', 'UserController@store');
 
+            Route::get('/admin-users/{user_id}/edit', 'UserController@edit');
+            Route::put('/admin-users/{user_id}', 'UserController@save');
+
         });
     });
 });

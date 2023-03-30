@@ -96,6 +96,33 @@ class UserController extends Controller
     }
 
     /**
+     * Edit View
+     */
+    public function edit($id)
+    {
+        $user = User::find($id);
+
+        if ($user == null) {
+            return back();
+        }
+
+        return view('users.edit', [
+            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/admin-users' => UserRole::ADMINISTRATORS_TITLE,
+                '/admin-users/' . $id . '/view' => $user->email,
+                '/admin-users/' . $id . '/edit' => 'Edit',
+            ],
+            'selected_menu' => MainMenu::ADMINS,
+            'selected_nav' => 'edit',
+            'user' => $user,
+            'date_formats' => DateFormat::toList(),
+            'datetime_formats' => DatetimeFormat::toList(),
+        ]);
+    }
+
+    /**
      * Store new User
      */
     public function store(Request $request)
@@ -109,12 +136,11 @@ class UserController extends Controller
                 'class' => 'alert bg-danger',
             ];
 
-            return redirect('/admin-users/create')
+            return redirect('/admin-users/create')->with([
+                'alerts' => $alerts,
+                ])
                 ->withErrors($validator)
-                ->withInput($request->all())
-                ->with([
-                    'alerts' => $alerts,
-                ]);
+                ->withInput($request->all());
         }
 
         $user->role_id = UserRole::ADMINISTRATOR_ID;
@@ -134,6 +160,56 @@ class UserController extends Controller
         ];
 
         return redirect('/admin-users')->with([
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * Save edited User
+     */
+    public function save(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if ($user == null) {
+            return back();
+        }
+
+        $validator = $user->validation($request, 'edit', $id);
+
+        if ($validator->fails()) {
+            $alerts[] = [
+                'message' => __('There were some errors on your form. Nothing was saved.'),
+                'class' => 'alert bg-danger',
+            ];
+
+            return redirect('/admin-users/' . $id . '/edit')->with([
+                'alerts' => $alerts,
+                ])
+                ->withErrors($validator)
+                ->withInput($request->all());
+        }
+
+        $password = $request->input('password');
+
+        $user->name = $request->input('full_name');
+        $user->email = $request->input('email');
+        $user->msisdn = $request->input('mobile_phone');
+        $user->date_format = $request->input('date_format');
+        $user->datetime_format = $request->input('datetime_format');
+
+        if ($password != null) {
+            $user->password = Hash::make($password);
+        }
+
+        $user->save();
+
+        $alerts[] = [
+            'message' => sprintf(__('%s successfully edited.'), $user->name),
+            'class' => __('alert bg-success'),
+        ];
+
+        return redirect('/admin-users/' . $id . '/view')->with([
             'alerts' => $alerts,
         ]);
     }

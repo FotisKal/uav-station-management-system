@@ -28,7 +28,7 @@
                 </div>
                 <br>
                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
-                    <a href="#" class="btn btn-md btn-primary float-left"> {{ __('Edit') }} </a>
+                    <a href="{{ url('admin-users/' . $user->id . '/edit') }}" class="btn btn-md btn-primary float-left"> {{ __('Edit') }} </a>
                 @endif
             </div>
         </div>
