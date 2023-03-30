@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="col-lg-6 mb-4">
-        <div class="card text-center bg-default">
+        <div class="row card text-center bg-default">
 
             @include('users.partials.nav')
 
