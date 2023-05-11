@@ -14,7 +14,9 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-
+    /**
+     * Index Admin Users
+     */
     public function index(Request $request)
     {
         $token = $request->input('token');
@@ -24,7 +26,7 @@ class UserController extends Controller
             ->orderBy('id')
             ->paginate(PerPage::get());
 
-        return view('users.index', [
+        return view('users.administrators.index', [
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
@@ -57,7 +59,7 @@ class UserController extends Controller
     {
         $user = new User();
 
-        return view('users.create', [
+        return view('users.administrators.create', [
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
@@ -82,7 +84,7 @@ class UserController extends Controller
             return back();
         }
 
-        return view('users.view', [
+        return view('users.administrators.view', [
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
@@ -106,7 +108,7 @@ class UserController extends Controller
             return back();
         }
 
-        return view('users.edit', [
+        return view('users.administrators.edit', [
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
