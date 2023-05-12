@@ -19,6 +19,11 @@ class UserController extends Controller
      */
     public function index(Request $request, $type)
     {
+
+        if ($type ) {
+
+        }
+
         $token = $request->input('token');
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
         $users = User::filter($search)
@@ -63,7 +68,7 @@ class UserController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/users/admin' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
                 '/users/admins/create' => 'Create',
             ],
             'selected_menu' => MainMenu::ADMINS,
@@ -88,7 +93,7 @@ class UserController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/users/admin' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
                 '/users/admins/' . $id . '/view' => $user->email,
             ],
             'selected_menu' => MainMenu::ADMINS,
@@ -112,7 +117,7 @@ class UserController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/users/admin' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
                 '/users/admins/' . $id . '/view' => $user->email,
                 '/users/admins/' . $id . '/edit' => 'Edit',
             ],
@@ -161,7 +166,7 @@ class UserController extends Controller
             'class' => __('alert bg-success'),
         ];
 
-        return redirect('/users/admin')->with([
+        return redirect('/users/admins')->with([
             'alerts' => $alerts,
         ]);
     }
@@ -234,7 +239,7 @@ class UserController extends Controller
             'class' => __('alert bg-warning'),
         ];
 
-        return redirect('/users/admin')->with([
+        return redirect('/users/admins')->with([
             'alerts' => $alerts,
         ]);
     }

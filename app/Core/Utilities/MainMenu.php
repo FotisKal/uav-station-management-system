@@ -49,7 +49,7 @@ class MainMenu
                 self::ADMINS => [
                     'icon' => 'fa-user',
                     'title' => UserRole::ADMINISTRATORS_TITLE,
-                    'url' => '/users/admin',
+                    'url' => '/users/admins',
                     'permissions' => [
                         Permission::CAN_VIEW_USERS,
                     ],
