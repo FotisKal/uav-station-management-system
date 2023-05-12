@@ -6,6 +6,7 @@ use App\Core\Utilities\DateFormat;
 use App\Core\Utilities\DatetimeFormat;
 use App\Core\Utilities\MainMenu;
 use App\Core\Utilities\PerPage;
+use App\Core\Utilities\Url;
 use App\User;
 use App\UserRole;
 use Illuminate\Http\Request;
@@ -19,27 +20,45 @@ class UserController extends Controller
      */
     public function index(Request $request, $type)
     {
+        $url_part = Url::$url_parts[Url::USERS];
 
-        if ($type ) {
-
+        if (!in_array($type, $url_part)) {
+            return back();
         }
 
         $token = $request->input('token');
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
-        $users = User::filter($search)
-            ->where('role_id', UserRole::ADMINISTRATOR_ID)
-            ->orderBy('id')
-            ->paginate(PerPage::get());
 
-        return view('users.administrators.index', [
-            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
+        if ($type == $url_part[UserRole::ADMINISTRATOR]) {
+            $users = User::filter($search)
+                ->where('role_id', UserRole::ADMINISTRATOR_ID)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+            $key = MainMenu::ADMINS;
+            $role_title = UserRole::ADMINISTRATORS_TITLE;
+            $view_dir = 'administrators';
+        } else if ($type == $url_part[UserRole::SIMPLE_USER]) {
+            $users = User::filter($search)
+                ->where('role_id', UserRole::SIMPLE_USER_ID)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+            $key = MainMenu::SIMPLE_USERS;
+            $role_title = UserRole::SIMPLE_USERS_TITLE;
+            $view_dir = 'uav_owners';
+        }
+
+        return view('users.' . $view_dir . '.index', [
+            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][$key]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/' . $type => $role_title,
             ],
-            'selected_menu' => MainMenu::ADMINS,
+            'selected_menu' => $key,
             'token' => $token,
             'users' => $users,
+            'type' => $type,
         ]);
     }
 

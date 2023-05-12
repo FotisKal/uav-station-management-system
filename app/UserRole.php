@@ -16,9 +16,9 @@ class UserRole
 
     const ADMINISTRATOR_TITLE = 'Administrator';
 
-    const SIMPLE_USER_TITLE = 'UAV User';
+    const SIMPLE_USER_TITLE = 'UAV Owner';
 
-    const SIMPLE_USERS_TITLE = 'UAV Users';
+    const SIMPLE_USERS_TITLE = 'UAV Owners';
 
     const ADMINISTRATORS_TITLE = 'Administrators';
 
@@ -64,7 +64,7 @@ class UserRole
     public static function toList()
     {
         $user_roles = [];
-        if (Auth::user()->role_id == self::ADMINISTRATOR_ID) {
+        if (\Auth::user()->role_id == self::ADMINISTRATOR_ID) {
             foreach (self::$roles as $role_id => $role) {
                 $user_roles[$role_id] = $role['title'];
             }

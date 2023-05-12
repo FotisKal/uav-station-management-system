@@ -57,7 +57,7 @@ class MainMenu
                 self::SIMPLE_USERS => [
                     'icon' => 'fa-rss',
                     'title' => UserRole::SIMPLE_USERS_TITLE,
-                    'url' => '/uav-users',
+                    'url' => '/users/uav-owners',
                     'permissions' => [
                         Permission::CAN_VIEW_USERS,
                     ],
