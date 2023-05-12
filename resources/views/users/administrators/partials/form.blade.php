@@ -59,6 +59,6 @@
         <input type="submit" class="btn btn-md btn-primary {{ $action == 'edit' ? 'float-left' : '' }}" value="{{ __('Save') }}">
     </div>
     <div class="col-6">
-        <a href="{{ url('admin-users') }}" class="btn btn-md btn-secondary"> {{ __('Cancel') }} </a>
+        <a href="{{ url('/users/admins') }}" class="btn btn-md btn-secondary"> {{ __('Cancel') }} </a>
     </div>
 </div>

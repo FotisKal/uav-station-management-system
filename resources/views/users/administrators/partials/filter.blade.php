@@ -10,7 +10,7 @@
         <div class="bg-light p-4">
 <!--            <h4 class="text-dark">Collapsed content</h4>
             <span class="text-muted">Toggleable via the navbar brand.</span>-->
-            <form action="{{ url('admin-users/search') }}" method="POST">
+            <form action="{{ url('/users/admins/search') }}" method="POST">
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="card-footer">
                     <input type="submit" class="btn btn-search" value="{{ __('Search') }}">
-                    <a class="btn shadow-none" href="{{ url('/admin-users') }}">{{ __('Clear') }}</a>
+                    <a class="btn shadow-none" href="{{ url('/users/admins') }}">{{ __('Clear') }}</a>
                 </div>
             </form>
         </div>

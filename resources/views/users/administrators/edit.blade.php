@@ -10,7 +10,7 @@
 
                 <div class="card-block">
                     <h3 class="card-title"> {{ __('Edit') }} </h3>
-                    <form class="form" action="{{ url('/admin-users/' . $user->id) }}" method="POST">
+                    <form class="form" action="{{ url('/users/admins/' . $user->id) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
 

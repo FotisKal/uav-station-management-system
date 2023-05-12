@@ -29,26 +29,26 @@ Route::group(['middleware' => [
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_ACCESS_PANEL]], function () {
 
-            Route::get('/admin-users', 'UserController@index');
-            Route::post('/admin-users/search', 'UserController@search');
+            Route::get('/users/{type}', 'UserController@index');
+            Route::post('/users/{type}/search', 'UserController@search');
 
         });
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_USERS]], function () {
 
-            Route::get('/admin-users/{user_id}/view', 'UserController@view');
+            Route::get('/users/{type}/{user_id}/view', 'UserController@view');
 
         });
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS]], function () {
 
-            Route::get('/admin-users/create', 'UserController@create');
-            Route::post('/admin-users', 'UserController@store');
+            Route::get('/users/{type}/create', 'UserController@create');
+            Route::post('/users/{type}', 'UserController@store');
 
-            Route::get('/admin-users/{user_id}/edit', 'UserController@edit');
-            Route::put('/admin-users/{user_id}', 'UserController@save');
+            Route::get('/users/{type}/{user_id}/edit', 'UserController@edit');
+            Route::put('/users/{type}/{user_id}', 'UserController@save');
 
-            Route::delete('/admin-users/{user_id}', 'UserController@delete');
+            Route::delete('/users/{type}/{user_id}', 'UserController@delete');
 
         });
     });

@@ -7,11 +7,11 @@
     <div class="row">
         <div class="col-lg-6 mb-sm-4 mb-lg-0">
             @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
-                <a href="{{ url('/admin-users/create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ __('Add New User') }} </a>
+                <a href="{{ url('/users/admins/create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ __('Add New User') }} </a>
             @endif
         </div>
         <div class="col-lg-6 mb-sm-4 mb-lg-0">
-            <form class="form-inline float-right" action="{{ url('admin-users/search') }}" method="POST">
+            <form class="form-inline float-right" action="{{ url('users/admins/search') }}" method="POST">
                 @csrf
                 <div class="input-group">
                     <span class="input-group-prepend">
@@ -45,19 +45,19 @@
                         @foreach ($users as $user)
                             <tr>
                                 <td>
-                                    <a href="{{ url('/admin-users/' . $user->id . '/view') }}"> {{ $user->email }} </a>
+                                    <a href="{{ url('/users/admins/' . $user->id . '/view') }}"> {{ $user->email }} </a>
                                 </td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->msisdn }}</td>
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"
-                                                onclick="window.location.href='{{ url('/admin-users/' . $user->id . '/edit') }}'">
+                                                onclick="window.location.href='{{ url('/users/admins/' . $user->id . '/edit') }}'">
                                             <span class="fa fa-edit"></span>&nbsp;{{ __('Edit') }}
                                         </button>
                                     </td>
                                     <td>
-                                        {!! delete_form(url('admin-users/' . $user->id)) !!}
+                                        {!! delete_form(url('users/admins/' . $user->id)) !!}
                                     </td>
                                 @endif
                             </tr>

@@ -9,7 +9,7 @@
                     <div class="card mb-4">
                         <div class="card-block">
                             <h3 class="card-title"> {{ __('Create') }} </h3>
-                            <form class="form" action="{{ url('/admin-users') }}" method="POST">
+                            <form class="form" action="{{ url('/users/admins') }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('POST') }}
 

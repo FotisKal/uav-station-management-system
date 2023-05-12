@@ -15,9 +15,9 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     /**
-     * Index Admin Users
+     * Index Users
      */
-    public function index(Request $request)
+    public function index(Request $request, $type)
     {
         $token = $request->input('token');
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
@@ -30,7 +30,7 @@ class UserController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/admin-users' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
             ],
             'selected_menu' => MainMenu::ADMINS,
             'token' => $token,
@@ -41,7 +41,7 @@ class UserController extends Controller
     /**
      * Search
      */
-    public function search(Request $request)
+    public function search(Request $request, $type)
     {
         $search = $request->all();
         $token = Str::random(6);
@@ -49,7 +49,7 @@ class UserController extends Controller
             'search_' . $token => $search,
         ]);
 
-        return redirect('/admin-users?token=' . $token);
+        return redirect('/users/' . $type . '/?token=' . $token);
     }
 
     /**
@@ -63,8 +63,8 @@ class UserController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/admin-users' => UserRole::ADMINISTRATORS_TITLE,
-                '/admin-users/create' => 'Create',
+                '/users/admin' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/admins/create' => 'Create',
             ],
             'selected_menu' => MainMenu::ADMINS,
             'user' => $user,
@@ -76,7 +76,7 @@ class UserController extends Controller
     /**
      * View View
      */
-    public function view($id)
+    public function view($type, $id)
     {
         $user = User::find($id);
 
@@ -88,8 +88,8 @@ class UserController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/admin-users' => UserRole::ADMINISTRATORS_TITLE,
-                '/admin-users/' . $id . '/view' => $user->email,
+                '/users/admin' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/admins/' . $id . '/view' => $user->email,
             ],
             'selected_menu' => MainMenu::ADMINS,
             'selected_nav' => 'view',
@@ -100,7 +100,7 @@ class UserController extends Controller
     /**
      * Edit View
      */
-    public function edit($id)
+    public function edit($type, $id)
     {
         $user = User::find($id);
 
@@ -112,9 +112,9 @@ class UserController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/admin-users' => UserRole::ADMINISTRATORS_TITLE,
-                '/admin-users/' . $id . '/view' => $user->email,
-                '/admin-users/' . $id . '/edit' => 'Edit',
+                '/users/admin' => UserRole::ADMINISTRATORS_TITLE,
+                '/users/admins/' . $id . '/view' => $user->email,
+                '/users/admins/' . $id . '/edit' => 'Edit',
             ],
             'selected_menu' => MainMenu::ADMINS,
             'selected_nav' => 'edit',
@@ -127,7 +127,7 @@ class UserController extends Controller
     /**
      * Store new User
      */
-    public function store(Request $request)
+    public function store(Request $request,$type)
     {
         $user = new User();
         $validator = $user->validation($request, 'create');
@@ -138,7 +138,7 @@ class UserController extends Controller
                 'class' => 'alert bg-danger',
             ];
 
-            return redirect('/admin-users/create')->with([
+            return redirect('/users/admins/create')->with([
                 'alerts' => $alerts,
                 ])
                 ->withErrors($validator)
@@ -161,7 +161,7 @@ class UserController extends Controller
             'class' => __('alert bg-success'),
         ];
 
-        return redirect('/admin-users')->with([
+        return redirect('/users/admin')->with([
             'alerts' => $alerts,
         ]);
     }
@@ -169,7 +169,7 @@ class UserController extends Controller
     /**
      * Save edited User
      */
-    public function save(Request $request, $id)
+    public function save(Request $request, $type, $id)
     {
         $user = User::find($id);
 
@@ -185,7 +185,7 @@ class UserController extends Controller
                 'class' => 'alert bg-danger',
             ];
 
-            return redirect('/admin-users/' . $id . '/edit')->with([
+            return redirect('/users/admins/' . $id . '/edit')->with([
                 'alerts' => $alerts,
                 ])
                 ->withErrors($validator)
@@ -211,7 +211,7 @@ class UserController extends Controller
             'class' => __('alert bg-success'),
         ];
 
-        return redirect('/admin-users/' . $id . '/view')->with([
+        return redirect('/users/admins/' . $id . '/view')->with([
             'alerts' => $alerts,
         ]);
     }
@@ -219,7 +219,7 @@ class UserController extends Controller
     /**
      * Delete User
      */
-    public function delete($id)
+    public function delete($type, $id)
     {
         $user = User::find($id);
 
@@ -234,7 +234,7 @@ class UserController extends Controller
             'class' => __('alert bg-warning'),
         ];
 
-        return redirect('/admin-users')->with([
+        return redirect('/users/admin')->with([
             'alerts' => $alerts,
         ]);
     }
