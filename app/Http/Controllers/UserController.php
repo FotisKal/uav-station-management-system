@@ -310,6 +310,12 @@ class UserController extends Controller
      */
     public function delete($type, $id)
     {
+        $url_parts = Url::$url_parts[Url::USERS];
+
+        if (!in_array($type, $url_parts)) {
+            return back();
+        }
+
         $user = User::find($id);
 
         if ($user == null) {
@@ -323,7 +329,7 @@ class UserController extends Controller
             'class' => __('alert bg-warning'),
         ];
 
-        return redirect('/users/admins')->with([
+        return redirect('/users/' . $type)->with([
             'alerts' => $alerts,
         ]);
     }
