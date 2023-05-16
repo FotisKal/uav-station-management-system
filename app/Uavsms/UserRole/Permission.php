@@ -41,6 +41,10 @@ class Permission
 
     const CAN_MANAGE_SESSIONS = 'can_manage_sessions';
 
+    const CAN_VIEW_UAVS = 'can_view_uavs';
+
+    const CAN_MANAGE_UAVS = 'can_manage_uavs';
+
     const SIMPLE_USER = UserRole::SIMPLE_USER;
 
     /**
@@ -102,6 +106,22 @@ class Permission
                 self::CAN_MANAGE_SESSIONS => [
                     'title' => 'Can manage sessions',
                     'description' => 'User with this permission can manage sessions.',
+                    'grantable' => true,
+                ],
+            ],
+        ],
+        'uavs' => [
+            'title' => 'Uavs',
+            'description' => 'Permissions related to UAVs',
+            'permissions' => [
+                self::CAN_VIEW_UAVS => [
+                    'title' => 'Can view UAVs',
+                    'description' => 'User with this permission can view UAVs.',
+                    'grantable' => true,
+                ],
+                self::CAN_MANAGE_UAVS => [
+                    'title' => 'Can manage UAVs',
+                    'description' => 'User with this permission can manage UAVs.',
                     'grantable' => true,
                 ],
             ],
