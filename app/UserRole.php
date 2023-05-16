@@ -46,6 +46,8 @@ class UserRole
                 Permission::CAN_VIEW_FILE_MANAGER,
                 Permission::CAN_VIEW_SESSIONS,
                 Permission::CAN_MANAGE_SESSIONS,
+                Permission::CAN_VIEW_UAVS,
+                Permission::CAN_MANAGE_UAVS,
             ],
         ],
         self::SIMPLE_USER => [
