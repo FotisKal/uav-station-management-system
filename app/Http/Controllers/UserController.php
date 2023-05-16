@@ -158,21 +158,37 @@ class UserController extends Controller
      */
     public function edit($type, $id)
     {
+        $url_parts = Url::$url_parts[Url::USERS];
+
+        if (!in_array($type, $url_parts)) {
+            return back();
+        }
+
         $user = User::find($id);
 
         if ($user == null) {
             return back();
         }
 
-        return view('users.administrators.edit', [
-            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
+        if ($type == $url_parts[UserRole::ADMINISTRATOR]) {
+            $view_dir = 'administrators';
+            $key = MainMenu::ADMINS;
+            $role_title = UserRole::ADMINISTRATORS_TITLE;
+        }  elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
+            $view_dir = 'uav_owners';
+            $key = MainMenu::SIMPLE_USERS;
+            $role_title = UserRole::SIMPLE_USERS_TITLE;
+        }
+
+        return view('users.' . $view_dir . '.edit', [
+            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][$key]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
-                '/users/admins/' . $id . '/view' => $user->email,
-                '/users/admins/' . $id . '/edit' => 'Edit',
+                '/users/' . $type => $role_title,
+                '/users/' . $type . '/' . $id . '/view' => $user->email,
+                '/users/' . $type . '/' . $id . '/edit' => 'Edit',
             ],
-            'selected_menu' => MainMenu::ADMINS,
+            'selected_menu' => $key,
             'selected_nav' => 'edit',
             'user' => $user,
             'date_formats' => DateFormat::toList(),
@@ -238,6 +254,12 @@ class UserController extends Controller
      */
     public function save(Request $request, $type, $id)
     {
+        $url_parts = Url::$url_parts[Url::USERS];
+
+        if (!in_array($type, $url_parts)) {
+            return back();
+        }
+
         $user = User::find($id);
 
         if ($user == null) {
@@ -252,7 +274,7 @@ class UserController extends Controller
                 'class' => 'alert bg-danger',
             ];
 
-            return redirect('/users/admins/' . $id . '/edit')->with([
+            return redirect('/users/' . $type . '/' . $id . '/edit')->with([
                 'alerts' => $alerts,
                 ])
                 ->withErrors($validator)
@@ -278,7 +300,7 @@ class UserController extends Controller
             'class' => __('alert bg-success'),
         ];
 
-        return redirect('/users/admins/' . $id . '/view')->with([
+        return redirect('/users/' . $type . '/' . $id . '/view')->with([
             'alerts' => $alerts,
         ]);
     }
