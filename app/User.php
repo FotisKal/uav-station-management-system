@@ -50,6 +50,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Has Many UAVs
+     */
+    public function uavs()
+    {
+        if ($this->role->id == UserRole::SIMPLE_USER_ID) {
+            return $this->hasMany('App\Uavsms\Uav\Uav', 'owner_user_id');
+        }
+    }
+
+    /**
      * Get User Permissions
      */
     public function getPermissions()

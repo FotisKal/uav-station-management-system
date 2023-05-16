@@ -118,20 +118,36 @@ class UserController extends Controller
      */
     public function view($type, $id)
     {
+        $url_parts = Url::$url_parts[Url::USERS];
+
+        if (!in_array($type, $url_parts)) {
+            return back();
+        }
+
         $user = User::find($id);
 
         if ($user == null) {
             return back();
         }
 
-        return view('users.administrators.view', [
-            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
+        if ($type == $url_parts[UserRole::ADMINISTRATOR]) {
+            $view_dir = 'administrators';
+            $key = MainMenu::ADMINS;
+            $role_title = UserRole::ADMINISTRATORS_TITLE;
+        } elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
+            $view_dir = 'uav_owners';
+            $key = MainMenu::SIMPLE_USERS;
+            $role_title = UserRole::SIMPLE_USERS_TITLE;
+        }
+
+        return view('users.' . $view_dir . '.view', [
+            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][$key]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
-                '/users/admins/' . $id . '/view' => $user->email,
+                '/users/' . $type => $role_title,
+                '/users/' . $type . '/' . $id . '/view' => $user->email,
             ],
-            'selected_menu' => MainMenu::ADMINS,
+            'selected_menu' => $key,
             'selected_nav' => 'view',
             'user' => $user,
         ]);
