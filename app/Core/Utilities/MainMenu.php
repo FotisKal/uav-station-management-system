@@ -25,6 +25,8 @@ class MainMenu
 
     const SIMPLE_USERS = 'simple_users';
 
+    const UAVS = 'uavs';
+
     /**
      * Menu Items
      */
@@ -62,6 +64,16 @@ class MainMenu
                         Permission::CAN_VIEW_USERS,
                     ],
                 ],
+            ],
+        ],
+        self::UAVS => [
+            'icon' => 'fa-fighter-jet',
+            'title' => 'UAVs',
+            'url' => '/uavs',
+            'permissions' => [
+                Permission::CAN_VIEW_UAVS,
+            ],
+            'sub_items' => [
             ],
         ],
     ];
