@@ -20,16 +20,16 @@ class UserController extends Controller
      */
     public function index(Request $request, $type)
     {
-        $url_part = Url::$url_parts[Url::USERS];
+        $url_parts = Url::$url_parts[Url::USERS];
 
-        if (!in_array($type, $url_part)) {
+        if (!in_array($type, $url_parts)) {
             return back();
         }
 
         $token = $request->input('token');
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
 
-        if ($type == $url_part[UserRole::ADMINISTRATOR]) {
+        if ($type == $url_parts[UserRole::ADMINISTRATOR]) {
             $users = User::filter($search)
                 ->where('role_id', UserRole::ADMINISTRATOR_ID)
                 ->orderBy('id')
@@ -38,7 +38,7 @@ class UserController extends Controller
             $key = MainMenu::ADMINS;
             $role_title = UserRole::ADMINISTRATORS_TITLE;
             $view_dir = 'administrators';
-        } else if ($type == $url_part[UserRole::SIMPLE_USER]) {
+        } else if ($type == $url_parts[UserRole::SIMPLE_USER]) {
             $users = User::filter($search)
                 ->where('role_id', UserRole::SIMPLE_USER_ID)
                 ->orderBy('id')
@@ -79,18 +79,34 @@ class UserController extends Controller
     /**
      * Create View
      */
-    public function create()
+    public function create($type)
     {
+        $url_parts = Url::$url_parts[Url::USERS];
+
+        if (!in_array($type, $url_parts)) {
+            return back();
+        }
+
+        if ($type == $url_parts[UserRole::ADMINISTRATOR]) {
+            $view_dir = 'administrators';
+            $key = MainMenu::ADMINS;
+            $role_title = UserRole::ADMINISTRATORS_TITLE;
+        }  elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
+            $view_dir = 'uav_owners';
+            $key = MainMenu::SIMPLE_USERS;
+            $role_title = UserRole::SIMPLE_USERS_TITLE;
+        }
+
         $user = new User();
 
-        return view('users.administrators.create', [
-            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][MainMenu::ADMINS]['title'],
+        return view('users.' . $view_dir . '.create', [
+            'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][$key]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/users/admins' => UserRole::ADMINISTRATORS_TITLE,
-                '/users/admins/create' => 'Create',
+                '/users/' . $type => $role_title,
+                '/users/' . $type . '/create' => 'Create',
             ],
-            'selected_menu' => MainMenu::ADMINS,
+            'selected_menu' => $key,
             'user' => $user,
             'date_formats' => DateFormat::toList(),
             'datetime_formats' => DatetimeFormat::toList(),
@@ -151,8 +167,14 @@ class UserController extends Controller
     /**
      * Store new User
      */
-    public function store(Request $request,$type)
+    public function store(Request $request, $type)
     {
+        $url_parts = Url::$url_parts[Url::USERS];
+
+        if (!in_array($type, $url_parts)) {
+            return back();
+        }
+
         $user = new User();
         $validator = $user->validation($request, 'create');
 
@@ -162,14 +184,19 @@ class UserController extends Controller
                 'class' => 'alert bg-danger',
             ];
 
-            return redirect('/users/admins/create')->with([
+            return redirect('/users/' . $type . '/create')->with([
                 'alerts' => $alerts,
                 ])
                 ->withErrors($validator)
                 ->withInput($request->all());
         }
 
-        $user->role_id = UserRole::ADMINISTRATOR_ID;
+        if ($type == $url_parts[UserRole::ADMINISTRATOR]) {
+            $user->role_id = UserRole::ADMINISTRATOR_ID;
+        } elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
+            $user->role_id = UserRole::SIMPLE_USER_ID;
+        }
+
         $user->name = $request->input('full_name');
         $user->email = $request->input('email');
         $user->msisdn = $request->input('mobile_phone');
@@ -185,7 +212,7 @@ class UserController extends Controller
             'class' => __('alert bg-success'),
         ];
 
-        return redirect('/users/admins')->with([
+        return redirect('/users/' . $type)->with([
             'alerts' => $alerts,
         ]);
     }
