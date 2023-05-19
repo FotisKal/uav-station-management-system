@@ -54,6 +54,19 @@ Route::group(['middleware' => [
             Route::delete('/users/{type}/{user_id}', 'UserController@delete');
 
         });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_UAVS]], function () {
+
+            Route::get('/uavs/{id}/view', 'UavController@view');
+
+        });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS]], function () {
+
+            Route::get('/uavs/create', 'UavController@create');
+            Route::post('/uavs', 'UavController@store');
+
+        });
     });
 });
 
