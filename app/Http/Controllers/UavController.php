@@ -100,6 +100,33 @@ class UavController extends Controller
     }
 
     /**
+     * Edit View
+     */
+    public function edit($id)
+    {
+        $uav = Uav::find($id);
+
+        if ($uav == null) {
+            return back();
+        }
+
+        $emails = USER::uavOwnersEmailsToList(false);
+
+        return view('uavs.edit', [
+            'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+                '/uavs/' . $id . '/edit' => 'Edit',
+            ],
+            'selected_menu' => MainMenu::UAVS,
+            'selected_nav' => 'edit',
+            'uav' => $uav,
+            'emails' => $emails,
+        ]);
+    }
+
+    /**
      * Store new UAV
      */
     public function store(Request $request)
@@ -131,6 +158,47 @@ class UavController extends Controller
         ];
 
         return redirect('/uavs')->with([
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * Save edited UAV
+     */
+    public function save(Request $request, $id)
+    {
+        $uav = Uav::find($id);
+
+        if ($uav == null) {
+            return back();
+        }
+
+        $validator = $uav->validation($request, 'edit', $id);
+
+        if ($validator->fails()) {
+            $alerts[] = [
+                'message' => __('There were some errors on your form. Nothing was saved.'),
+                'class' => 'alert bg-danger',
+            ];
+
+            return redirect('/uavs/' . $id . '/edit')->with([
+                'alerts' => $alerts,
+            ])
+                ->withErrors($validator)
+                ->withInput($request->all());
+        }
+
+        $uav->name = $request->input('name');
+        $uav->owner_user_id = $request->input('user_id');
+
+        $uav->save();
+
+        $alerts[] = [
+            'message' => sprintf(__('%s successfully edited.'), $uav->name),
+            'class' => __('alert bg-success'),
+        ];
+
+        return redirect('/uavs/' . $id . '/view')->with([
             'alerts' => $alerts,
         ]);
     }
