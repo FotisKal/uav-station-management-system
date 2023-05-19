@@ -171,4 +171,25 @@ class User extends Authenticatable
 
         return Validator::make($request->all(), $rules, $messages);
     }
+
+    /**
+     * All UAV Owners' Emails
+     */
+    public static function uavOwnersEmailsToList($default_first_val = false)
+    {
+        $data = [];
+
+        $users = User::where('role_id', UserRole::SIMPLE_USER_ID)
+            ->get();
+
+        if ($default_first_val) {
+            $data[0] = __('Select UAV Owner\'s Email');
+        }
+
+        foreach ($users as $user) {
+            $data[$user->id] = $user->email;
+        }
+
+        return $data;
+    }
 }
