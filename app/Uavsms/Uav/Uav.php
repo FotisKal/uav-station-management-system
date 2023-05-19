@@ -3,6 +3,9 @@
 namespace App\Uavsms\Uav;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
+use App\UserRole;
+use Validator;
 
 class Uav extends Model
 {
@@ -38,5 +41,37 @@ class Uav extends Model
         }
 
         return $query;
+    }
+
+    /**
+     * Validation
+     */
+    public function validation($request, $action = '', $id = null)
+    {
+        $rules = [
+            'name' => [
+                'required',
+                'max:50',
+            ],
+            'user_id' => [
+                'required',
+                'integer',
+                Rule::exists('users','id')->where(function ($query) {
+                    $query->where('role_id', UserRole::SIMPLE_USER_ID);
+                }),
+            ],
+        ];
+
+        $messages = [
+            'name' => __('Invalid name'),
+            'name.required' => __('The name can\'t be empty'),
+            'name.max' => __('The name can\'t be longer than 50 characters'),
+
+            'user_id.required' => __('The UAV Owner can\'t be empty'),
+            'user_id.integer' => __('The UAV Owner Id must be a number'),
+            'user_id.exists' => __('The UAV Owner must be an existing one'),
+        ];
+
+        return Validator::make($request->all(), $rules, $messages);
     }
 }
