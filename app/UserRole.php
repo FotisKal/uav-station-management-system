@@ -48,6 +48,7 @@ class UserRole
                 Permission::CAN_MANAGE_SESSIONS,
                 Permission::CAN_VIEW_UAVS,
                 Permission::CAN_MANAGE_UAVS,
+                Permission::CAN_VIEW_COMPANIES,
             ],
         ],
         self::SIMPLE_USER => [
