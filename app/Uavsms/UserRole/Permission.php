@@ -45,6 +45,8 @@ class Permission
 
     const CAN_MANAGE_UAVS = 'can_manage_uavs';
 
+    const CAN_VIEW_COMPANIES = 'can_view_companies';
+
     const SIMPLE_USER = UserRole::SIMPLE_USER;
 
     /**
@@ -122,6 +124,17 @@ class Permission
                 self::CAN_MANAGE_UAVS => [
                     'title' => 'Can manage UAVs',
                     'description' => 'User with this permission can manage UAVs.',
+                    'grantable' => true,
+                ],
+            ],
+        ],
+        'companies' => [
+            'title' => 'Companies',
+            'description' => 'Permissions related to Companies',
+            'permissions' => [
+                self::CAN_VIEW_COMPANIES => [
+                    'title' => 'Can view Companies',
+                    'description' => 'User with this permission can view Companies.',
                     'grantable' => true,
                 ],
             ],
