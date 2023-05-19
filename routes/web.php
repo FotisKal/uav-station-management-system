@@ -66,6 +66,9 @@ Route::group(['middleware' => [
             Route::get('/uavs/create', 'UavController@create');
             Route::post('/uavs', 'UavController@store');
 
+            Route::get('/uavs/{id}/edit', 'UavController@edit');
+            Route::put('/uavs/{id}', 'UavController@save');
+
         });
     });
 });
