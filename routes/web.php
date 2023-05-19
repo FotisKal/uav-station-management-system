@@ -69,6 +69,8 @@ Route::group(['middleware' => [
             Route::get('/uavs/{id}/edit', 'UavController@edit');
             Route::put('/uavs/{id}', 'UavController@save');
 
+            Route::delete('/uavs/{id}', 'UavController@delete');
+
         });
     });
 });
