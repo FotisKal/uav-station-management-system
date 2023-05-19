@@ -27,6 +27,8 @@ class MainMenu
 
     const UAVS = 'uavs';
 
+    const COMPANIES = 'companies';
+
     /**
      * Menu Items
      */
@@ -72,6 +74,16 @@ class MainMenu
             'url' => '/uavs',
             'permissions' => [
                 Permission::CAN_VIEW_UAVS,
+            ],
+            'sub_items' => [
+            ],
+        ],
+        self::COMPANIES => [
+            'icon' => 'fa-building-o',
+            'title' => 'Companies',
+            'url' => '/companies',
+            'permissions' => [
+                Permission::CAN_VIEW_COMPANIES,
             ],
             'sub_items' => [
             ],
