@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Core\Utilities\MainMenu;
 use App\Core\Utilities\PerPage;
 use App\Uavsms\Uav\Uav;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -22,6 +23,8 @@ class UavController extends Controller
             ->orderBy('id')
             ->paginate(PerPage::get());
 
+        $emails = USER::uavOwnersEmailsToList(true);
+
         return view('uavs.index', [
             'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
             'breadcrumbs' => [
@@ -31,6 +34,7 @@ class UavController extends Controller
             'selected_menu' => MainMenu::UAVS,
             'token' => $token,
             'uavs' => $uavs,
+            'emails' => $emails,
         ]);
     }
 
