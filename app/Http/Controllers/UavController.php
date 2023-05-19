@@ -66,12 +66,36 @@ class UavController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/uavs/' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+                '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
                 '/uavs/create' => 'Create',
             ],
             'selected_menu' => MainMenu::UAVS,
             'uav' => $uav,
             'emails' => $emails,
+        ]);
+    }
+
+    /**
+     * View View
+     */
+    public function view($id)
+    {
+        $uav = Uav::find($id);
+
+        if ($uav == null) {
+            return back();
+        }
+
+        return view('uavs.view', [
+            'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+                '/uavs/' . $id . '/view' => 'View',
+            ],
+            'selected_menu' => MainMenu::UAVS,
+            'selected_nav' => 'view',
+            'uav' => $uav,
         ]);
     }
 
