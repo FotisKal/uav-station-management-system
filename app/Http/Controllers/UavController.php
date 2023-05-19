@@ -52,4 +52,62 @@ class UavController extends Controller
 
         return redirect('/uavs/?token=' . $token);
     }
+
+    /**
+     * Create View
+     */
+    public function create()
+    {
+        $uav = new Uav();
+
+        $emails = USER::uavOwnersEmailsToList(true);
+
+        return view('uavs.create', [
+            'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/uavs/' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+                '/uavs/create' => 'Create',
+            ],
+            'selected_menu' => MainMenu::UAVS,
+            'uav' => $uav,
+            'emails' => $emails,
+        ]);
+    }
+
+    /**
+     * Store new UAV
+     */
+    public function store(Request $request)
+    {
+        $uav = new Uav();
+        $validator = $uav->validation($request, 'create');
+
+        if ($validator->fails()) {
+            $alerts[] = [
+                'message' => __('There were some errors on your form. Nothing was saved.'),
+                'class' => 'alert bg-danger',
+            ];
+
+            return redirect('/uavs/create')->with([
+                'alerts' => $alerts,
+            ])
+                ->withErrors($validator)
+                ->withInput($request->all());
+        }
+
+        $uav->name = $request->input('name');
+        $uav->owner_user_id = $request->input('user_id');
+
+        $uav->save();
+
+        $alerts[] = [
+            'message' => __('Registration successfully done.'),
+            'class' => __('alert bg-success'),
+        ];
+
+        return redirect('/uavs')->with([
+            'alerts' => $alerts,
+        ]);
+    }
 }
