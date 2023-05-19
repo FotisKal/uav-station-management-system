@@ -32,6 +32,9 @@ Route::group(['middleware' => [
             Route::get('/users/{type}', 'UserController@index');
             Route::post('/users/{type}/search', 'UserController@search');
 
+            Route::get('/uavs', 'UavController@index');
+            Route::post('/uavs/search', 'UavController@search');
+
         });
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_USERS]], function () {
