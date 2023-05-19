@@ -20,6 +20,7 @@ class UavController extends Controller
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
 
         $uavs = Uav::filter($search)
+            ->with('user')
             ->orderBy('id')
             ->paginate(PerPage::get());
 
