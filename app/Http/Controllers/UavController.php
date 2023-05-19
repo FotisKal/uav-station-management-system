@@ -202,4 +202,27 @@ class UavController extends Controller
             'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * Delete UAV
+     */
+    public function delete($id)
+    {
+        $uav = Uav::find($id);
+
+        if ($uav == null) {
+            return back();
+        }
+
+        $uav->delete();
+
+        $alerts[] = [
+            'message' => __('UAV successfully deleted.'),
+            'class' => __('alert bg-warning'),
+        ];
+
+        return redirect('/uavs')->with([
+            'alerts' => $alerts,
+        ]);
+    }
 }
