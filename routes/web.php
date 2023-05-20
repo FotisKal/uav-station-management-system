@@ -38,6 +38,9 @@ Route::group(['middleware' => [
             Route::get('/charging-companies', 'ChargingCompanyController@index');
             Route::post('/charging-companies/search', 'ChargingCompanyController@search');
 
+            Route::get('/charging-stations', 'ChargingStationController@index');
+            Route::post('/charging-stations/search', 'ChargingStationController@search');
+
         });
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_USERS]], function () {
