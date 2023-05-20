@@ -47,6 +47,10 @@ class Permission
 
     const CAN_VIEW_COMPANIES = 'can_view_companies';
 
+    const CAN_VIEW_STATIONS = 'can_view_stations';
+
+    const CAN_MANAGE_STATIONS = 'can_manage_stations';
+
     const SIMPLE_USER = UserRole::SIMPLE_USER;
 
     /**
@@ -139,6 +143,22 @@ class Permission
                 ],
             ],
         ],
+        'stations' => [
+            'title' => 'Stations',
+            'description' => 'Permissions related to Stations',
+            'permissions' => [
+                self::CAN_VIEW_STATIONS => [
+                    'title' => 'Can view Stations',
+                    'description' => 'User with this permission can view Stations.',
+                    'grantable' => true,
+                ],
+                self::CAN_MANAGE_STATIONS => [
+                    'title' => 'Can manage Stations',
+                    'description' => 'User with this permission can manage Stations.',
+                    'grantable' => true,
+                ],
+            ],
+        ],
     ];
 
     /**
@@ -155,7 +175,3 @@ class Permission
         return false;
     }
 }
-
-
-
-
