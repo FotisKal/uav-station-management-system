@@ -49,6 +49,8 @@ class UserRole
                 Permission::CAN_VIEW_UAVS,
                 Permission::CAN_MANAGE_UAVS,
                 Permission::CAN_VIEW_COMPANIES,
+                Permission::CAN_VIEW_STATIONS,
+                Permission::CAN_MANAGE_STATIONS,
             ],
         ],
         self::SIMPLE_USER => [
