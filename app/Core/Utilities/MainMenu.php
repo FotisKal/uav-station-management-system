@@ -27,7 +27,7 @@ class MainMenu
 
     const UAVS = 'uavs';
 
-    const COMPANIES = 'companies';
+    const CHARGING_COMPANIES = 'charging_companies';
 
     /**
      * Menu Items
@@ -78,10 +78,10 @@ class MainMenu
             'sub_items' => [
             ],
         ],
-        self::COMPANIES => [
+        self::CHARGING_COMPANIES => [
             'icon' => 'fa-building-o',
-            'title' => 'Companies',
-            'url' => '/companies',
+            'title' => 'Charging Companies',
+            'url' => '/charging-companies',
             'permissions' => [
                 Permission::CAN_VIEW_COMPANIES,
             ],

@@ -15,7 +15,7 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-//Route::get('/test', 'TestController@test');
+Route::get('/test', 'TestController@test');
 
 Auth::routes();
 
@@ -34,6 +34,9 @@ Route::group(['middleware' => [
 
             Route::get('/uavs', 'UavController@index');
             Route::post('/uavs/search', 'UavController@search');
+
+            Route::get('/charging-companies', 'ChargingCompanyController@index');
+            Route::post('/charging-companies/search', 'ChargingCompanyController@search');
 
         });
 
