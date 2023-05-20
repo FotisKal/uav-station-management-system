@@ -22,13 +22,13 @@ class ChargingCompanyController extends Controller
             ->orderBy('id')
             ->paginate(PerPage::get());
 
-        return view('companies.index', [
-            'page_title' => MainMenu::$menu_items[MainMenu::COMPANIES]['title'],
+        return view('charging_companies.index', [
+            'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/companies' => MainMenu::$menu_items[MainMenu::COMPANIES]['title'],
+                '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
             ],
-            'selected_menu' => MainMenu::COMPANIES,
+            'selected_menu' => MainMenu::CHARGING_COMPANIES,
             'token' => $token,
             'companies' => $companies,
         ]);
@@ -45,6 +45,6 @@ class ChargingCompanyController extends Controller
             'search_' . $token => $search,
         ]);
 
-        return redirect('/companies/?token=' . $token);
+        return redirect('/charging-companies/?token=' . $token);
     }
 }
