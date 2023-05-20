@@ -29,6 +29,8 @@ class MainMenu
 
     const CHARGING_COMPANIES = 'charging_companies';
 
+    const CHARGING_STATIONS = 'charging_stations';
+
     /**
      * Menu Items
      */
@@ -74,6 +76,16 @@ class MainMenu
             'url' => '/uavs',
             'permissions' => [
                 Permission::CAN_VIEW_UAVS,
+            ],
+            'sub_items' => [
+            ],
+        ],
+        self::CHARGING_STATIONS => [
+            'icon' => 'fa fa-plug',
+            'title' => 'Charging Stations',
+            'url' => '/charging-stations',
+            'permissions' => [
+                Permission::CAN_VIEW_STATIONS,
             ],
             'sub_items' => [
             ],
