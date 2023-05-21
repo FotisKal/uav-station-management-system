@@ -78,6 +78,13 @@ Route::group(['middleware' => [
             Route::delete('/uavs/{id}', 'UavController@delete');
 
         });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS]], function () {
+
+            Route::get('/charging-stations/create', 'ChargingStationController@create');
+            Route::post('/charging-stations', 'ChargingStationController@store');
+
+        });
     });
 });
 

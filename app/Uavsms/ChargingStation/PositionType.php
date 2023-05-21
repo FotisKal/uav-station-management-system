@@ -27,4 +27,22 @@ class PositionType
         self::GROUND => 'Ground',
         self::WATER => 'Water',
     ];
+
+    /**
+     * All Types
+     */
+    public static function ToList($default_first_val = false)
+    {
+        $data = [];
+
+        if ($default_first_val) {
+            $data[0] = __('Select Position Type');
+        }
+
+        foreach (self::$permissions_config as $key => $permission) {
+            $data[$key] = $permission;
+        }
+
+        return $data;
+    }
 }
