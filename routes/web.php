@@ -90,6 +90,9 @@ Route::group(['middleware' => [
             Route::get('/charging-stations/create', 'ChargingStationController@create');
             Route::post('/charging-stations', 'ChargingStationController@store');
 
+            Route::get('/charging-stations/{id}/edit', 'ChargingStationController@edit');
+            Route::put('/charging-stations/{id}', 'ChargingStationController@save');
+
         });
     });
 });
