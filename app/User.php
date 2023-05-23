@@ -179,7 +179,7 @@ class User extends Authenticatable
     {
         $data = [];
 
-        $users = User::where('role_id', UserRole::SIMPLE_USER_ID)
+        $users = self::where('role_id', UserRole::SIMPLE_USER_ID)
             ->get();
 
         if ($default_first_val) {

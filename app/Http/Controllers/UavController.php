@@ -30,7 +30,7 @@ class UavController extends Controller
             'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/uavs/' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+                '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
             ],
             'selected_menu' => MainMenu::UAVS,
             'token' => $token,
