@@ -61,8 +61,6 @@ class ChargingStationController extends Controller
     {
         $station = new ChargingStation();
 
-        $names = ChargingCompany::companiesNamesToList(true);
-
         return view('charging_stations.create', [
             'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
             'breadcrumbs' => [
@@ -72,7 +70,7 @@ class ChargingStationController extends Controller
             ],
             'selected_menu' => MainMenu::CHARGING_STATIONS,
             'station' => $station,
-            'names' => $names,
+            'names' => ChargingCompany::companiesNamesToList(true),
             'position_types' => PositionType::ToList(true),
         ]);
     }
@@ -98,6 +96,32 @@ class ChargingStationController extends Controller
             'selected_menu' => MainMenu::CHARGING_STATIONS,
             'selected_nav' => 'view',
             'station' => $station,
+        ]);
+    }
+
+    /**
+     * Edit View
+     */
+    public function edit($id)
+    {
+        $station = ChargingStation::find($id);
+
+        if ($station == null) {
+            return back();
+        }
+
+        return view('charging_stations.edit', [
+            'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/charging-stations' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
+                '/charging-stations/' . $id . '/edit' => 'Edit',
+            ],
+            'selected_menu' => MainMenu::CHARGING_STATIONS,
+            'selected_nav' => 'edit',
+            'station' => $station,
+            'names' => ChargingCompany::companiesNamesToList(),
+            'position_types' => PositionType::ToList(),
         ]);
     }
 
@@ -139,6 +163,47 @@ class ChargingStationController extends Controller
         ];
 
         return redirect('/charging-stations')->with([
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * Save edited Station
+     */
+    public function save(Request $request, $id)
+    {
+        $station = ChargingStation::find($id);
+
+        if ($station == null) {
+            return back();
+        }
+
+        $validator = $station->validation($request, 'edit', $id);
+
+        if ($validator->fails()) {
+            $alerts[] = [
+                'message' => __('There were some errors on your form. Nothing was saved.'),
+                'class' => 'alert bg-danger',
+            ];
+
+            return redirect('/charging-stations/' . $id . '/edit')->with([
+                'alerts' => $alerts,
+            ])
+                ->withErrors($validator)
+                ->withInput($request->all());
+        }
+
+        $station->name = $request->input('name');
+        $station->company_id = $request->input('company_id');
+
+        $station->save();
+
+        $alerts[] = [
+            'message' => sprintf(__('%s successfully edited.'), $station->name),
+            'class' => __('alert bg-success'),
+        ];
+
+        return redirect('/charging-stations/' . $id . '/view')->with([
             'alerts' => $alerts,
         ]);
     }

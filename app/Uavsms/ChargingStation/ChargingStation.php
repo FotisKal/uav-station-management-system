@@ -73,19 +73,23 @@ class ChargingStation extends Model
                 'required',
                 Rule::in(array_flip(PositionType::toList())),
             ],
-            'position_x' => [
+        ];
+
+        if ($action == 'create') {
+            $rules ['position_x'] = [
                 'required',
                 'numeric',
                 'min:-180',
                 'max:180',
-            ],
-            'position_y' => [
+            ];
+
+            $rules ['position_y'] = [
                 'required',
                 'numeric',
                 'min:-90',
                 'max:90',
-            ],
-        ];
+            ];
+        }
 
         $messages = [
             'name' => __('Invalid name'),
