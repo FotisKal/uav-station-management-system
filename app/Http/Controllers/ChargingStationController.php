@@ -7,6 +7,7 @@ use App\Core\Utilities\PerPage;
 use App\Uavsms\ChargingCompany\ChargingCompany;
 use App\Uavsms\ChargingStation\ChargingStation;
 use App\Uavsms\ChargingStation\PositionType;
+use App\Uavsms\Uav\Uav;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -73,6 +74,30 @@ class ChargingStationController extends Controller
             'station' => $station,
             'names' => $names,
             'position_types' => PositionType::ToList(true),
+        ]);
+    }
+
+    /**
+     * View View
+     */
+    public function view($id)
+    {
+        $station = ChargingStation::find($id);
+
+        if ($station == null) {
+            return back();
+        }
+
+        return view('charging_stations.view', [
+            'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/charging-stations' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
+                '/charging-stations/' . $id . '/view' => 'View',
+            ],
+            'selected_menu' => MainMenu::CHARGING_STATIONS,
+            'selected_nav' => 'view',
+            'station' => $station,
         ]);
     }
 

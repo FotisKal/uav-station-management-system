@@ -26,6 +26,14 @@ class ChargingStation extends Model
     ];
 
     /**
+     * Belongs To a Company
+     */
+    public function company()
+    {
+        return $this->belongsTo('App\Uavsms\ChargingCompany\ChargingCompany', 'company_id');
+    }
+
+    /**
      * Scope Filter
      */
     public function scopeFilter($query, $search)

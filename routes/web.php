@@ -79,6 +79,12 @@ Route::group(['middleware' => [
 
         });
 
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_STATIONS]], function () {
+
+            Route::get('/charging-stations/{id}/view', 'ChargingStationController@view');
+
+        });
+
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS]], function () {
 
             Route::get('/charging-stations/create', 'ChargingStationController@create');
