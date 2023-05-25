@@ -31,6 +31,8 @@ class MainMenu
 
     const CHARGING_STATIONS = 'charging_stations';
 
+    const CHARGING_SESSIONS = 'charging_sessions';
+
     /**
      * Menu Items
      */
@@ -86,6 +88,16 @@ class MainMenu
             'url' => '/charging-stations',
             'permissions' => [
                 Permission::CAN_VIEW_STATIONS,
+            ],
+            'sub_items' => [
+            ],
+        ],
+        self::CHARGING_SESSIONS => [
+            'icon' => 'fa-hourglass-start',
+            'title' => 'Charging Sessions',
+            'url' => '/charging-sessions',
+            'permissions' => [
+                Permission::CAN_VIEW_SESSIONS,
             ],
             'sub_items' => [
             ],
