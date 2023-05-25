@@ -207,4 +207,27 @@ class ChargingStationController extends Controller
             'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * Delete Station
+     */
+    public function delete($id)
+    {
+        $station = ChargingStation::find($id);
+
+        if ($station == null) {
+            return back();
+        }
+
+        $station->delete();
+
+        $alerts[] = [
+            'message' => __('Station successfully deleted.'),
+            'class' => __('alert bg-warning'),
+        ];
+
+        return redirect('/charging-stations')->with([
+            'alerts' => $alerts,
+        ]);
+    }
 }
