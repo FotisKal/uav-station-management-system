@@ -116,4 +116,24 @@ class ChargingStation extends Model
 
         return Validator::make($request->all(), $rules, $messages);
     }
+
+    /**
+     * All Stations' Names
+     */
+    public static function namesToList($default_first_val = false)
+    {
+        $data = [];
+
+        $stations = self::all();
+
+        if ($default_first_val) {
+            $data[0] = __('Select Station\'s Name');
+        }
+
+        foreach ($stations as $station) {
+            $data[$station->id] = $station->name;
+        }
+
+        return $data;
+    }
 }

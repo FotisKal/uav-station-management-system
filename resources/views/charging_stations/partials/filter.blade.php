@@ -20,7 +20,7 @@
                             <input type="text" name="name" id="name" class="form-control" value="{{ @$search['name'] }}">
                         </div>
                         <div class="col-8 col-md-8 col-lg-8 col-xl-4">
-                            <label for="user_id" class="col-form-label"> {{ __('Companies') }}: </label>
+                            <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
                             <div class="col-md-9">
                                 {!! selectbox('company_id', 'company_id', $names, 0) !!}
                             </div>

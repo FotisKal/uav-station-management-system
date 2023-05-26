@@ -41,6 +41,9 @@ Route::group(['middleware' => [
             Route::get('/charging-stations', 'ChargingStationController@index');
             Route::post('/charging-stations/search', 'ChargingStationController@search');
 
+            Route::get('/charging-sessions', 'ChargingSessionController@index');
+            Route::post('/charging-sessions/search', 'ChargingSessionController@search');
+
         });
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_USERS]], function () {
@@ -92,6 +95,15 @@ Route::group(['middleware' => [
 
             Route::get('/charging-stations/{id}/edit', 'ChargingStationController@edit');
             Route::put('/charging-stations/{id}', 'ChargingStationController@save');
+
+            Route::delete('/charging-stations/{id}', 'ChargingStationController@delete');
+
+        });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS]], function () {
+
+            Route::get('/charging-sessions/create', 'ChargingSessionController@create');
+            Route::post('/charging-sessions', 'ChargingSessionController@store');
 
         });
     });

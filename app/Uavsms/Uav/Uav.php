@@ -74,4 +74,24 @@ class Uav extends Model
 
         return Validator::make($request->all(), $rules, $messages);
     }
+
+    /**
+     * All UAVs' Ids
+     */
+    public static function idsToList($default_first_val = false)
+    {
+        $data = [];
+
+        $uavs = self::all();
+
+        if ($default_first_val) {
+            $data[0] = __('Select UAV\'s Id');
+        }
+
+        foreach ($uavs as $uav) {
+            $data[$uav->id] = $uav->id;
+        }
+
+        return $data;
+    }
 }
