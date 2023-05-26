@@ -25,7 +25,7 @@ class ChargingStationController extends Controller
             ->orderBy('id')
             ->paginate(PerPage::get());
 
-        $names = ChargingCompany::companiesNamesToList(true);
+        $names = ChargingCompany::namesToList(true);
 
         return view('charging_stations.index', [
             'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
@@ -70,7 +70,7 @@ class ChargingStationController extends Controller
             ],
             'selected_menu' => MainMenu::CHARGING_STATIONS,
             'station' => $station,
-            'names' => ChargingCompany::companiesNamesToList(true),
+            'names' => ChargingCompany::namesToList(true),
             'position_types' => PositionType::ToList(true),
         ]);
     }
@@ -120,7 +120,7 @@ class ChargingStationController extends Controller
             'selected_menu' => MainMenu::CHARGING_STATIONS,
             'selected_nav' => 'edit',
             'station' => $station,
-            'names' => ChargingCompany::companiesNamesToList(),
+            'names' => ChargingCompany::namesToList(),
             'position_types' => PositionType::ToList(),
         ]);
     }

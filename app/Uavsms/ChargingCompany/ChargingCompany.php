@@ -38,7 +38,7 @@ class ChargingCompany extends Model
     /**
      * All Companies' Names
      */
-    public static function companiesNamesToList($default_first_val = false)
+    public static function namesToList($default_first_val = false)
     {
         $data = [];
 
