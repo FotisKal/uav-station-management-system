@@ -17,6 +17,7 @@ class CreateUavs extends Migration
             $table->increments('id');
             $table->string('owner_user_id');
             $table->string('name');
+            $table->string('charging_percentage');
             $table->timestamps();
         });
     }
