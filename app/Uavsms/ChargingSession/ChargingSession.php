@@ -2,6 +2,7 @@
 
 namespace App\Uavsms\ChargingSession;
 
+use App\Uavsms\ChargingStation\ChargingStation;
 use App\Uavsms\Uav\Uav;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,7 +36,7 @@ class ChargingSession extends Model
      */
     public function uav()
     {
-        return $this->hasOne('App\Uavsms\Uav\Uav', 'uav_id');
+        return $this->hasOne('App\Uavsms\Uav\Uav', 'id');
     }
 
     /**
@@ -43,7 +44,7 @@ class ChargingSession extends Model
      */
     public function cost()
     {
-        return $this->hasOne('App\Uavsms\ChargingSession\ChargingSessionCost', 'charging_session_cost_id');
+        return $this->hasOne('App\Uavsms\ChargingSession\ChargingSessionCost', 'id');
     }
 
     /**
@@ -57,6 +58,13 @@ class ChargingSession extends Model
 
         if (!empty($search['station_id'])) {
             $query->where('charging_station_id', 'LIKE', '%' . $search['station_id'] . '%');
+        }
+
+        if (!empty($search['company_id'])) {
+            $station_ids = ChargingStation::where('company_id', $search['company_id'])
+                ->pluck('id');
+
+            $query->whereIn('charging_station_id', $station_ids);
         }
 
         if (!empty($search['user_id'])) {
@@ -80,5 +88,42 @@ class ChargingSession extends Model
         }
 
         return $query;
+    }
+
+    /**
+     * Validation
+     */
+    public function validation($request, $action = '', $id = null)
+    {
+        $rules = [
+            'station_id' => [
+                'required',
+                'exists:charging_stations,id',
+            ],
+            'uav_id' => [
+                'required',
+                'exists:uavs,id',
+            ],
+            'date_time_start' => [
+                'required',
+                'date_format:m/d/Y',
+            ],
+            'date_time_end' => [
+                'required',
+                'date_format:m/d/Y, after_or_equal:' . $request['date_time_end'],
+            ],
+        ];
+
+        $messages = [
+            'name' => __('Invalid name'),
+            'name.required' => __('The name can\'t be empty'),
+            'name.max' => __('The name can\'t be longer than 50 characters'),
+
+            'user_id.required' => __('The UAV Owner can\'t be empty'),
+            'user_id.integer' => __('The UAV Owner Id must be a number'),
+            'user_id.exists' => __('The UAV Owner must be an existing one'),
+        ];
+
+        return Validator::make($request->all(), $rules, $messages);
     }
 }

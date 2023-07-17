@@ -23,12 +23,10 @@
                             <label for="station_id" class="col-form-label"> {{ __('Charging Stations') }}: </label>
                             {!! selectbox('station_id', 'station_id', $station_names, 0) !!}
                         </div>
-<!--                        <div class="col-8 col-md-8 col-lg-8 col-xl-4">
+                        <div class="col-3 col-md-3 col-lg-3 col-xl-3">
                             <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
-                            <div class="col-md-9">
-{{--                                {!! selectbox('company_id', 'company_id', $companies_names, 0) !!}--}}
-                            </div>
-                        </div>-->
+                                {!! selectbox('company_id', 'company_id', $companies_names, 0) !!}
+                        </div>
                         <div class="col-3 col-md-3 col-lg-3 col-xl-3">
                             <label for="user_id" class="col-form-label"> {{ __('Uav Owners\' Emails') }}: </label>
                             {!! selectbox('user_id', 'user_id', $emails, 0) !!}
