@@ -79,6 +79,30 @@ class ChargingSessionController extends Controller
     }
 
     /**
+     * View View
+     */
+    public function view($id)
+    {
+        $session = ChargingSession::find($id);
+
+        if ($session == null) {
+            return back();
+        }
+
+        return view('charging_sessions.view', [
+            'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_SESSIONS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/charging-sessions' => MainMenu::$menu_items[MainMenu::CHARGING_SESSIONS]['title'],
+                '/charging-sessions/' . $id . '/view' => 'View',
+            ],
+            'selected_menu' => MainMenu::CHARGING_SESSIONS,
+            'selected_nav' => 'view',
+            'session' => $session,
+        ]);
+    }
+
+    /**
      * Store new Session
      */
     public function store(Request $request)

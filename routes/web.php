@@ -100,6 +100,12 @@ Route::group(['middleware' => [
 
         });
 
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_SESSIONS]], function () {
+
+            Route::get('/charging-sessions/{id}/view', 'ChargingSessionController@view');
+
+        });
+
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS]], function () {
 
             Route::get('/charging-sessions/create', 'ChargingSessionController@create');
