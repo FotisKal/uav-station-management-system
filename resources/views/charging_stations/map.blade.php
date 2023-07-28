@@ -3,7 +3,7 @@
 <script>
     var lat = {{ $station->position_json['x'] }};
     var lon = {{ $station->position_json['y'] }};
-    var zoom = 18;
+    var zoom = 13;
 
     var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
     var toProjection = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
