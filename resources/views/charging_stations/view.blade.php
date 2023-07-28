@@ -23,6 +23,16 @@
                                 <th class="text-left"> {{ __('Position Type') }} </th>
                                 <td> {{ \App\Uavsms\ChargingStation\PositionType::$permissions_config[$station->position_type] }} </td>
                             </tr>
+                            <tr>
+                                <th class="text-left"> {{ __('Charging Status') }} </th>
+                                <td>
+                                    @if(count($sessions))
+                                        <a href="{{ url('/charging-sessions/' . $sessions->first()->id . '/view') }}"> {{ __('Charging') }} </a>
+                                    @else
+                                        {{ __('Not Charging') }}
+                                    @endif
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
