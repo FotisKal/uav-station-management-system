@@ -86,6 +86,8 @@ Route::group(['middleware' => [
 
             Route::get('/charging-stations/{id}/view', 'ChargingStationController@view');
 
+            Route::get('/charging-stations/{id}/analytics', 'ChargingStationController@analytics');
+
         });
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS]], function () {

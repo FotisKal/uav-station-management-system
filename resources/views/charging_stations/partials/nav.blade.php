@@ -13,5 +13,11 @@
                 {{ __('Edit') }}
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ $selected_nav == 'analytics' ? 'active' : '' }}"
+               href="{{ url('/charging-stations/' . $station->id . '/analytics') }}">
+                {{ __('Analytics') }}
+            </a>
+        </li>
     </ul>
 </div>

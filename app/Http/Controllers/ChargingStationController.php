@@ -251,4 +251,48 @@ class ChargingStationController extends Controller
             'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * Analytics of Station
+     */
+    public function analytics($id)
+    {
+        $station = ChargingStation::find($id);
+
+        if ($station == null) {
+            return back();
+        }
+
+        $tz = 'Europe/Athens';
+        $timestamp = time();
+        $datetime_now = new DateTime("now", new DateTimeZone($tz));
+        $datetime_now->setTimestamp($timestamp);
+        $year_now_str = $datetime_now->format('Y');
+
+        $sessions_qb = ChargingSession::where('charging_station_id', $station->id)
+            ->whereYear('date_time_start', $year_now_str);
+
+        $kw_spent_monthly = [];
+
+        for ($i = 1; $i < 13; $i++) {
+            $kw_spent_monthly[$i] = $sessions_qb->whereMonth('date_time_start', $i)
+                ->sum('kw_spent');
+
+            array_pop($sessions_qb->getQuery()->bindings['where']);
+            array_pop($sessions_qb->getQuery()->wheres);
+        }
+
+        return view('charging_stations.analytics', [
+            'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/charging-stations' => MainMenu::$menu_items[MainMenu::CHARGING_STATIONS]['title'],
+                '/charging-stations/' . $id . '/analytics' => __('Analytics'),
+            ],
+            'selected_menu' => MainMenu::CHARGING_STATIONS,
+            'selected_nav' => 'analytics',
+            'station' => $station,
+            'kw_spent_monthly' => $kw_spent_monthly,
+        ]);
+    }
 }
