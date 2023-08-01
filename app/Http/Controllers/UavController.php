@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Core\Utilities\MainMenu;
 use App\Core\Utilities\PerPage;
+use App\Uavsms\ChargingSession\ChargingSession;
 use App\Uavsms\Uav\Uav;
 use App\User;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -86,6 +89,23 @@ class UavController extends Controller
             return back();
         }
 
+        $tz = 'Europe/Athens';
+        $timestamp = time();
+        $datetime_now = new DateTime("now", new DateTimeZone($tz));
+        $datetime_now->setTimestamp($timestamp);
+        $datetime_now_str = $datetime_now->format('Y-m-d H:i:s');
+
+        $sessions = ChargingSession::where('uav_id', $uav->id)
+            ->where(function($query) use ($datetime_now_str) {
+                $query->whereBetween('date_time_start', ['0001-01-01 00:00:00', $datetime_now_str]);
+                /*$query->whereBetween('date_time_end', [$datetime_now, '3000-01-01 00:00:00']);
+                $query->orWhereNull('date_time_end');
+                $query->whereBetween('date_time_start', ['0001-01-01 00:00:00', $datetime_now]);*/
+                $query->whereNull('date_time_end');
+
+            })
+            ->get();
+
         return view('uavs.view', [
             'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
             'breadcrumbs' => [
@@ -96,6 +116,7 @@ class UavController extends Controller
             'selected_menu' => MainMenu::UAVS,
             'selected_nav' => 'view',
             'uav' => $uav,
+            'sessions' => $sessions,
         ]);
     }
 

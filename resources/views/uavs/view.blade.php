@@ -21,6 +21,49 @@
                                     <a href="{{ url('/users/uav-owners/' . $uav->user->id . '/view') }}"> {{ $uav->user->email }} </a>
                                 </td>
                             </tr>
+                            <tr>
+                                <th class="text-left"> {{ __('Battery Level') }} </th>
+                                <td>
+                                    @if(count($sessions))
+                                        @if($uav->charging_percentage >= 0 &&
+                                            $uav->charging_percentage < 25)
+                                            <a href="{{ url('/charging-sessions/' . $sessions->first()->id . '/view') }}">
+                                                <em class="fa fa-battery-quarter" id="session-view-battery-level-quarter-em"></em>
+                                            </a>
+                                        @elseif($uav->charging_percentage >= 25 &&
+                                            $uav->charging_percentage < 50)
+                                            <a href="{{ url('/charging-sessions/' . $sessions->first()->id . '/view') }}">
+                                                <em class="fa fa-battery-half" id="session-view-battery-level-half-em"></em>
+                                            </a>
+                                        @elseif($uav->charging_percentage >= 50 &&
+                                            $uav->charging_percentage < 75)
+                                            <a href="{{ url('/charging-sessions/' . $sessions->first()->id . '/view') }}">
+                                                <em class="fa fa-battery-three-quarters" id="session-view-battery-level-three-quarters-em"></em>
+                                            </a>
+                                        @elseif($uav->charging_percentage >= 75 &&
+                                            $uav->charging_percentage < 100)
+                                            <a href="{{ url('/charging-sessions/' . $sessions->first()->id . '/view') }}">
+                                                <em class="fa fa-battery-full" id="session-view-battery-level-full-em"></em>
+                                            </a>
+                                        @endif
+                                    @else
+                                        @if($uav->charging_percentage >= 0 &&
+                                            $uav->charging_percentage < 25)
+                                            <em class="fa fa-battery-quarter"></em>
+                                        @elseif($uav->charging_percentage >= 25 &&
+                                            $uav->charging_percentage < 50)
+                                            <em class="fa fa-battery-half"></em>
+                                        @elseif($uav->charging_percentage >= 50 &&
+                                            $uav->charging_percentage < 75)
+                                            <em class="fa fa-battery-three-quarters"></em>
+                                        @elseif($uav->charging_percentage >= 75 &&
+                                            $uav->charging_percentage < 100)
+                                            <em class="fa fa-battery-full"></em>
+                                        @endif
+                                    @endif
+                                    {{ $uav->charging_percentage }}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
