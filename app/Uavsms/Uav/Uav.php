@@ -15,6 +15,15 @@ class Uav extends Model
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'position_json' => 'array',
+    ];
+
+    /**
      * Belongs To a User
      */
     public function user()
