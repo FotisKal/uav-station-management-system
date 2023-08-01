@@ -17,7 +17,9 @@
                             </tr>
                             <tr>
                                 <th class="text-left"> {{ __('UAV Owner\'s Email') }} </th>
-                                <td> {{ $uav->user->email }} </td>
+                                <td>
+                                    <a href="{{ url('/users/uav-owners/' . $uav->user->id . '/view') }}"> {{ $uav->user->email }} </a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -29,5 +31,7 @@
             </div>
         </div>
     </div>
+
+    @include('uavs.map')
 
 @endsection

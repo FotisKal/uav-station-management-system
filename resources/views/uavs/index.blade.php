@@ -46,7 +46,9 @@
                                 <td>
                                     <a href="{{ url('/uavs/' . $uav->id . '/view') }}"> {{ $uav->name }} </a>
                                 </td>
-                                <td>{{ $uav->user->email }}</td>
+                                <td>
+                                    <a href="{{ url('/users/uav-owners/' . $uav->user->id . '/view') }}"> {{ $uav->user->email }} </a>
+                                </td>
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"
