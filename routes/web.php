@@ -68,6 +68,8 @@ Route::group(['middleware' => [
 
             Route::get('/uavs/{id}/view', 'UavController@view');
 
+            Route::get('/uavs/{id}/analytics', 'UavController@analytics');
+
         });
 
         Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS]], function () {

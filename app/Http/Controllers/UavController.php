@@ -246,4 +246,52 @@ class UavController extends Controller
             'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * Analytics of UAV
+     */
+    public function analytics($id)
+    {
+        $uav = Uav::find($id);
+
+        if ($uav == null) {
+            return back();
+        }
+
+        $tz = 'Europe/Athens';
+        $timestamp = time();
+        $datetime_now = new DateTime("now", new DateTimeZone($tz));
+        $datetime_now->setTimestamp($timestamp);
+        $year_now_str = $datetime_now->format('Y');
+
+        $sessions_qb = ChargingSession::where('uav_id', $uav->id)
+            ->whereYear('date_time_start', $year_now_str);
+
+        $sessions_monthly = [];
+
+        for ($i = 1; $i < 13; $i++) {
+            $sessions_monthly[$i] = $sessions_qb->whereMonth('date_time_start', $i)
+                ->whereNotNull('date_time_end')
+                ->get();
+
+            array_pop($sessions_qb->getQuery()->bindings['where']);
+
+            for ($j = 0; $j < 2; $j++) {
+                array_pop($sessions_qb->getQuery()->wheres);
+            }
+        }
+
+        return view('uavs.analytics', [
+            'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+                '/uavs/' . $id . '/analytics' => __('Analytics'),
+            ],
+            'selected_menu' => MainMenu::UAVS,
+            'selected_nav' => 'analytics',
+            'uav' => $uav,
+            'sessions_monthly' => $sessions_monthly,
+        ]);
+    }
 }
