@@ -43,7 +43,7 @@ return [
 
         'api' => [
             'driver' => 'token',
-            'provider' => 'users',
+            'provider' => 'charging_stations',
             'hash' => false,
         ],
     ],
@@ -75,6 +75,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'charging_stations' => [
+            'driver' => 'database',
+            'table' => 'charging_stations',
+        ],
     ],
 
     /*
