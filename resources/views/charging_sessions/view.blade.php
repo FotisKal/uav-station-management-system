@@ -45,18 +45,35 @@
                                 <tr>
                                     <th class="text-left"> {{ __('Charging Percentage') }} </th>
                                     <td>
+
                                         @if($session->uav->charging_percentage >= 0 &&
                                             $session->uav->charging_percentage < 25)
-                                            <em class="fa fa-battery-quarter" id="session-view-battery-level-quarter-em"></em>
+                                            @if($session->date_time_end == null)
+                                                <em class="fa fa-battery-quarter" id="session-view-battery-level-quarter-em"></em>
+                                            @else
+                                                <em class="fa fa-battery-quarter"></em>
+                                            @endif
                                         @elseif($session->uav->charging_percentage >= 25 &&
                                             $session->uav->charging_percentage < 50)
-                                            <em class="fa fa-battery-half" id="session-view-battery-level-half-em"></em>
+                                            @if($session->date_time_end == null)
+                                                <em class="fa fa-battery-half" id="session-view-battery-level-half-em"></em>
+                                            @else
+                                                <em class="fa fa-battery-half"></em>
+                                            @endif
                                         @elseif($session->uav->charging_percentage >= 50 &&
                                             $session->uav->charging_percentage < 75)
-                                            <em class="fa fa-battery-three-quarters" id="session-view-battery-level-three-quarters-em"></em>
+                                            @if($session->date_time_end == null)
+                                                <em class="fa fa-battery-three-quarters" id="session-view-battery-level-three-quarters-em"></em>
+                                            @else
+                                                <em class="fa fa-battery-three-quarters"></em>
+                                            @endif
                                         @elseif($session->uav->charging_percentage >= 75 &&
                                         $session->uav->charging_percentage < 100)
-                                            <em class="fa fa-battery-full" id="session-view-battery-level-full-em"></em>
+                                            @if($session->date_time_end == null)
+                                                <em class="fa fa-battery-full" id="session-view-battery-level-full-em"></em>
+                                            @else
+                                                <em class="fa fa-battery-full"></em>
+                                            @endif
                                         @endif
                                         {{ $session->uav->charging_percentage }}
                                     </td>
