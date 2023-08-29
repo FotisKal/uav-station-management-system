@@ -36,7 +36,7 @@ class ChargingSession extends Model
      */
     public function uav()
     {
-        return $this->hasOne('App\Uavsms\Uav\Uav', 'id');
+        return $this->hasOne('App\Uavsms\Uav\Uav', 'id', 'uav_id');
     }
 
     /**
