@@ -19,7 +19,7 @@ class CreateChargingSessions extends Migration
             $table->string('uav_id');
             $table->dateTimeTz('date_time_start', 0);
             $table->dateTimeTz('date_time_end', 0)->nullable();
-            $table->dateTimeTz('estimated_date_time_end', 0);
+            $table->dateTimeTz('estimated_date_time_end', 0)->nullable();
             $table->float('kw_spent', 6);
             $table->string('charging_session_cost_id');
             $table->timestamps();

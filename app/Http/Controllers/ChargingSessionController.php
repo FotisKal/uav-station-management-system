@@ -10,6 +10,8 @@ use App\Uavsms\ChargingSession\ChargingSessionCost;
 use App\Uavsms\ChargingStation\ChargingStation;
 use App\Uavsms\Uav\Uav;
 use App\User;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -149,5 +151,60 @@ class ChargingSessionController extends Controller
         return redirect('/charging-sessions')->with([
             'alerts' => $alerts,
         ]);
+    }
+
+    /**
+     * API Store new Session
+     */
+    public function apiStore(Request $request)
+    {
+        $charging_station = $request->user();
+        $uav_id = $request->json('uav_id');
+
+        $charging_sessions = ChargingSession::where('charging_station_id', $charging_station->id)
+            ->where('uav_id', $uav_id)
+            ->where('date_time_end', null)
+            ->get();
+
+        if(count($charging_sessions) > 0) {
+            $response = [
+                'charging_session_created' => false,
+                'message' => __('Charging Station with id: ' . $charging_station->id . ' or UAV with id: ' . $uav_id . ' is in a Session right now.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
+        $tz = 'Europe/Athens';
+        $timestamp = time();
+        $datetime_now = new DateTime("now", new DateTimeZone($tz));
+        $datetime_now->setTimestamp($timestamp);
+        $datetime_now_str = $datetime_now->format('Y-m-d H:i:s');
+
+        $session = new ChargingSession();
+
+        $session->charging_station_id = $charging_station->id;
+        $session->uav_id = $uav_id;
+        $session->date_time_start = $datetime_now_str;
+        $session->date_time_end = null;
+        $session->estimated_date_time_end = null;
+        $session->kw_spent = 0;
+
+        $cost = new ChargingSessionCost();
+
+        $cost->credits = 0;
+
+        $cost->save();
+
+        $session->charging_session_cost_id = $cost->id;
+
+        $session->save();
+
+        $response = [
+            'charging_session_created' => true,
+            'message' => __('New Charging Session is created.'),
+        ];
+
+        return response()->json($response, 200);
     }
 }
