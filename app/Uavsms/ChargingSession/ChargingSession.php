@@ -32,11 +32,11 @@ class ChargingSession extends Model
     }
 
     /**
-     * Has A UAV
+     * Belongs To a UAV
      */
     public function uav()
     {
-        return $this->hasOne('App\Uavsms\Uav\Uav', 'id', 'uav_id');
+        return $this->belongsTo('App\Uavsms\Uav\Uav');
     }
 
     /**
