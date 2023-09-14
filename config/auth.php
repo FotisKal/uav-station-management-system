@@ -46,6 +46,11 @@ return [
             'provider' => 'charging_stations',
             'hash' => false,
         ],
+        'api_uavs' => [
+            'driver' => 'token',
+            'provider' => 'uavs',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -80,6 +85,12 @@ return [
             'driver' => 'database',
             'table' => 'charging_stations',
         ],
+
+        'uavs' => [
+            'driver' => 'database',
+            'table' => 'uavs',
+        ],
+
     ],
 
     /*
