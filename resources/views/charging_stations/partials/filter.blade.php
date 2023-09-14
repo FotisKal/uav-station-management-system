@@ -15,15 +15,19 @@
                 @csrf
                 <div class="card-body">
                     <div class="row">
+                        @if(\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                            <div class="col-8 col-md-8 col-lg-8 col-xl-4">
+                                <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
+                                {!! selectbox('company_id', 'company_id', $names, 0) !!}
+                            </div>
+                        @endif
                         <div class="col-4 col-md-4 col-lg-4 col-xl-2">
                             <label for="name" class="col-form-label"> {{ __('Name') }}: </label>
                             <input type="text" name="name" id="name" class="form-control" value="{{ @$search['name'] }}">
                         </div>
                         <div class="col-8 col-md-8 col-lg-8 col-xl-4">
-                            <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
-                            <div class="col-md-9">
-                                {!! selectbox('company_id', 'company_id', $names, 0) !!}
-                            </div>
+                            <label for="position_type_id" class="col-form-label"> {{ __('Position Types') }}: </label>
+                            {!! selectbox('position_type_id', 'position_type_id', $position_types, 0) !!}
                         </div>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
                                     <a href="{{ url('/charging-sessions/' . $session->id . '/view') }}"> {{ $session->id }} </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('/charging-stations/' . $session->station->id . '/view') }}"> {{ $session->station->name }} </a>
+                                    <a href="{{ url('/charging-stations/' . $session->charging_stations_id . '/view') }}"> {{ $session->charging_stations_name }} </a>
                                 </td>
                                 <td>
                                     {{ $session->date_time_start ?? '-' }}

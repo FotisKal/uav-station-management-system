@@ -9,7 +9,7 @@
 <div class="form-group row">
     <label class="col-md-3 col-form-label"><span class="required">*</span> {{ __('Uav Owners\' Emails') }}: </label>
     <div class="col-md-9">
-        {!! selectbox('user_id', 'user_id', $emails, ($action == 'edit' ? $uav->user->id : 0)) !!}
+        {!! selectbox('user_id', 'user_id', $emails, ($action == 'edit' ? $uav->uavOwner->id : 0)) !!}
         {!! errors_form($errors, 'user_id', 'd-block ' . ($action == 'edit' ? 'text-left' : '')) !!}
     </div>
 </div>

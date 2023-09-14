@@ -18,7 +18,7 @@
                             <tr>
                                 <th class="text-left"> {{ __('UAV Owner\'s Email') }} </th>
                                 <td>
-                                    <a href="{{ url('/users/uav-owners/' . $uav->user->id . '/view') }}"> {{ $uav->user->email }} </a>
+                                    <a href="{{ url('/uav-owners/' . $uav->uavOwner->id . '/view') }}"> {{ $uav->uavOwner->email }} </a>
                                 </td>
                             </tr>
                             <tr>
@@ -47,7 +47,9 @@
                                             </a>
                                         @endif
                                     @else
-                                        @if($uav->charging_percentage >= 0 &&
+                                        @if($uav->charging_percentage == null)
+                                            {{ '-' }}
+                                        @elseif($uav->charging_percentage >= 0 &&
                                             $uav->charging_percentage < 25)
                                             <em class="fa fa-battery-quarter"></em>
                                         @elseif($uav->charging_percentage >= 25 &&
@@ -57,11 +59,11 @@
                                             $uav->charging_percentage < 75)
                                             <em class="fa fa-battery-three-quarters"></em>
                                         @elseif($uav->charging_percentage >= 75 &&
-                                            $uav->charging_percentage < 100)
+                                            $uav->charging_percentage <= 100)
                                             <em class="fa fa-battery-full"></em>
                                         @endif
                                     @endif
-                                    {{ $uav->charging_percentage }}
+                                    {{ $uav->charging_percentage . '%' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -75,6 +77,7 @@
         </div>
     </div>
 
-    @include('uavs.map')
-
+    @if ($uav->position_json != null)
+        @include('uavs.map')
+    @endif
 @endsection

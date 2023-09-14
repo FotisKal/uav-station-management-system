@@ -44,6 +44,8 @@
         </div>
     </div>
 
-    @include('charging_stations.map')
+    @if ($station->position_json != null)
+        @include('charging_stations.map')
+    @endif
 
 @endsection

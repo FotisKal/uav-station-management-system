@@ -34,6 +34,9 @@
                             <tr>
                                 <th> {{ __('Name') }} </th>
                                 <th> {{ __('Owner\'s Email') }} </th>
+                                @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                    <th> {{ __('Company\'s Name') }} </th>
+                                @endif
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS))
                                     <th colspan="2" class=""> {{ __('Actions') }} </th>
                                 @endif
@@ -47,8 +50,13 @@
                                     <a href="{{ url('/uavs/' . $uav->id . '/view') }}"> {{ $uav->name }} </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('/users/uav-owners/' . $uav->user->id . '/view') }}"> {{ $uav->user->email }} </a>
+                                    <a href="{{ url('/uav-owners/' . $uav->uavOwner->id . '/view') }}"> {{ $uav->uavOwner->email }} </a>
                                 </td>
+                                @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                    <td>
+                                        <a href="{{ url('/charging-companies/' . $uav->company->id . '/view') }}"> {{ $uav->company->name }} </a>
+                                    </td>
+                                @endif
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"

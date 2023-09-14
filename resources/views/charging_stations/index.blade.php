@@ -35,8 +35,12 @@
                         <thead>
                         <tr>
                             <th> {{ __('Name') }} </th>
+                            <th> {{ __('Position Type') }} </th>
                             @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS))
                                 <th colspan="2" class=""> {{ __('Actions') }} </th>
+                            @endif
+                            @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                <th> {{ __('Company\'s Name') }} </th>
                             @endif
                         </tr>
                         </thead>
@@ -47,6 +51,14 @@
                                 <td>
                                     <a href="{{ url('/charging-stations/' . $station->id . '/view') }}"> {{ $station->name }} </a>
                                 </td>
+                                <td>
+                                    {{ \App\Uavsms\ChargingStation\PositionType::$permissions_config[$station->position_type] }}
+                                </td>
+                                @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                    <td>
+                                        <a href="{{ url('/charging-companies/' . $station->company->id . '/view') }}"> {{ $station->company->name }} </a>
+                                    </td>
+                                @endif
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"

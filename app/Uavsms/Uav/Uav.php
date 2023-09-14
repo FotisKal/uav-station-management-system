@@ -24,11 +24,19 @@ class Uav extends Model
     ];
 
     /**
-     * Belongs To a User
+     * Belongs To a UAV Owner
      */
-    public function user()
+    public function uavOwner()
     {
-        return $this->belongsTo('App\User', 'owner_user_id');
+        return $this->belongsTo('App\Uavsms\UavOwner\UavOwner', 'owner_id');
+    }
+
+    /**
+     * Belongs To a Company
+     */
+    public function company()
+    {
+        return $this->belongsTo('App\Uavsms\ChargingCompany\ChargingCompany', 'company_id', 'id');
     }
 
     /**
@@ -36,12 +44,16 @@ class Uav extends Model
      */
     public function scopeFilter($query, $search)
     {
+        if (!empty($search['company_id'])) {
+            $query->where('company_id', 'LIKE', '%' . $search['company_id'] . '%');
+        }
+
         if (!empty($search['name'])) {
             $query->where('name', 'LIKE', '%' . $search['name'] . '%');
         }
 
         if (!empty($search['user_id'])) {
-            $query->where('owner_user_id', 'LIKE', '%' . $search['user_id'] . '%');
+            $query->where('owner_id', 'LIKE', '%' . $search['user_id'] . '%');
         }
 
         if (!empty($search['search'])) {
@@ -53,23 +65,60 @@ class Uav extends Model
     }
 
     /**
+     * Scope Filter
+     */
+    public function scopeJoinedOwnerFilter($query, $search)
+    {
+        if (!empty($search['company_id'])) {
+            $query->where('company_id', 'LIKE', '%' . $search['company_id'] . '%');
+        }
+
+        if (!empty($search['email'])) {
+            $query->where('email', 'LIKE', '%' . $search['email'] . '%');
+        }
+
+        if (!empty($search['name'])) {
+            $query->where('uav_owners.name', 'LIKE', '%' . $search['name'] . '%');
+        }
+
+        if (!empty($search['mobile_phone'])) {
+            $query->where('msisdn', 'LIKE', '%' . $search['mobile_phone'] . '%');
+        }
+
+        if (!empty($search['search'])) {
+            $query->where('uav_owners.id', is_numeric($search['search']) ? $search['search'] : -1)
+                ->orWhere('uav_owners.name', 'LIKE', '%' . $search['search'] . '%');
+        }
+
+        return $query;
+    }
+
+    /**
      * Validation
      */
     public function validation($request, $action = '', $id = null)
     {
-        $rules = [
-            'name' => [
-                'required',
-                'max:50',
-            ],
-            'user_id' => [
-                'required',
-                'integer',
-                Rule::exists('users','id')->where(function ($query) {
-                    $query->where('role_id', UserRole::SIMPLE_USER_ID);
-                }),
-            ],
-        ];
+        if ($action == 'uav_owner_create') {
+            $rules = [
+                'name' => [
+                    'required',
+                    'max:50',
+                ],
+            ];
+
+        } else {
+            $rules = [
+                'name' => [
+                    'required',
+                    'max:50',
+                ],
+                'user_id' => [
+                    'required',
+                    'integer',
+                    'exists:uav_owners,id',
+                ],
+            ];
+        }
 
         $messages = [
             'name' => __('Invalid name'),

@@ -4,7 +4,6 @@ namespace App;
 
 use App\Core\Utilities\DateFormat;
 use App\Core\Utilities\DatetimeFormat;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Validation\Rule;
@@ -50,13 +49,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Has Many UAVs
+     * Belongs To a Company
      */
-    public function uavs()
+    public function company()
     {
-        if ($this->role->id == UserRole::SIMPLE_USER_ID) {
-            return $this->hasMany('App\Uavsms\Uav\Uav', 'owner_user_id');
-        }
+        return $this->belongsTo('App\Uavsms\ChargingCompany\ChargingCompany');
     }
 
     /**
@@ -90,6 +87,10 @@ class User extends Authenticatable
      */
     public function scopeFilter($query, $search)
     {
+        if (!empty($search['company_id'])) {
+            $query->where('company_id', 'LIKE', '%' . $search['company_id'] . '%');
+        }
+
         if (!empty($search['email'])) {
             $query->where('email', 'LIKE', '%' . $search['email'] . '%');
         }
@@ -173,9 +174,9 @@ class User extends Authenticatable
     }
 
     /**
-     * All UAV Owners' Emails
+     * All Companies Administrator's Emails
      */
-    public static function uavOwnersEmailsToList($default_first_val = false)
+    public static function companiesAdminEmailsToList($default_first_val = false)
     {
         $data = [];
 
@@ -183,7 +184,7 @@ class User extends Authenticatable
             ->get();
 
         if ($default_first_val) {
-            $data[0] = __('Select UAV Owner\'s Email');
+            $data[0] = __('Select Company\'s Administrator Email');
         }
 
         foreach ($users as $user) {

@@ -5,24 +5,24 @@
     <div class="col-lg-6 mb-4">
         <div class="row card text-center bg-default">
 
-            @include('users.uav_owners.partials.nav')
+            @include('users.company_administrators.partials.nav')
 
             <div class="card-block">
                 <div class="table-responsive table-hover table-bordered">
                     <table class="table table-striped">
                         <tbody>
-                            <tr>
-                                <th class="text-left"> {{ __('Full Name') }} </th>
-                                <td> {{ $user->name }} </td>
-                            </tr>
-                            <tr>
-                                <th class="text-left"> {{ __('Email') }} </th>
-                                <td> {{ $user->email }} </td>
-                            </tr>
-                            <tr>
-                                <th class="text-left"> {{ __('Mobile Phone') }} </th>
-                                <td> {{ $user->msisdn }} </td>
-                            </tr>
+                        <tr>
+                            <th class="text-left"> {{ __('Full Name') }} </th>
+                            <td> {{ $user->name }} </td>
+                        </tr>
+                        <tr>
+                            <th class="text-left"> {{ __('Email') }} </th>
+                            <td> {{ $user->email }} </td>
+                        </tr>
+                        <tr>
+                            <th class="text-left"> {{ __('Mobile Phone') }} </th>
+                            <td> {{ $user->msisdn }} </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

@@ -18,7 +18,7 @@ class CreateChargingStations extends Migration
             $table->string('name');
             $table->string('company_id')->index();
             $table->string('position_type');
-            $table->text('position_json');
+            $table->text('position_json')->nullable();
             $table->timestamps();
         });
     }

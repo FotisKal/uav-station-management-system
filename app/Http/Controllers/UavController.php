@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Core\Utilities\MainMenu;
 use App\Core\Utilities\PerPage;
+use App\Uavsms\ChargingCompany\AnalyticsOption;
+use App\Uavsms\ChargingCompany\ChargingCompany;
 use App\Uavsms\ChargingSession\ChargingSession;
 use App\Uavsms\Uav\Uav;
+use App\Uavsms\UavOwner\UavOwner;
 use App\User;
+use App\UserRole;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class UavController extends Controller
@@ -22,12 +27,28 @@ class UavController extends Controller
         $token = $request->input('token');
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
 
-        $uavs = Uav::filter($search)
-            ->with('user')
-            ->orderBy('id')
-            ->paginate(PerPage::get());
+        $user = Auth::user();
 
-        $emails = USER::uavOwnersEmailsToList(true);
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $uavs_with_owners_paginator = Uav::filter($search)
+                ->with('uavOwner')
+                ->with('company')
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+            $names = ChargingCompany::namesToList(true);
+
+        } else if ($user->role_id == UserRole::SIMPLE_USER_ID) {
+            $uavs_with_owners_paginator = Uav::filter($search)
+                ->where('company_id', $user->company_id)
+                ->with('uavOwner')
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+            $names = null;
+        }
+
+        $emails = UavOwner::emailsToList(true);
 
         return view('uavs.index', [
             'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
@@ -37,8 +58,9 @@ class UavController extends Controller
             ],
             'selected_menu' => MainMenu::UAVS,
             'token' => $token,
-            'uavs' => $uavs,
+            'uavs' => $uavs_with_owners_paginator,
             'emails' => $emails,
+            'names' => $names,
         ]);
     }
 
@@ -63,7 +85,7 @@ class UavController extends Controller
     {
         $uav = new Uav();
 
-        $emails = USER::uavOwnersEmailsToList(true);
+        $emails = UavOwner::emailsToList(true);
 
         return view('uavs.create', [
             'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
@@ -83,9 +105,14 @@ class UavController extends Controller
      */
     public function view($id)
     {
+        $user = Auth::user();
         $uav = Uav::find($id);
 
         if ($uav == null) {
+            return back();
+        }
+
+        if ($uav->company != $user->company) {
             return back();
         }
 
@@ -111,7 +138,7 @@ class UavController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
-                '/uavs/' . $id . '/view' => 'View',
+                '/uavs/' . $id . '/view' => $uav->name,
             ],
             'selected_menu' => MainMenu::UAVS,
             'selected_nav' => 'view',
@@ -125,20 +152,26 @@ class UavController extends Controller
      */
     public function edit($id)
     {
+        $user = Auth::user();
         $uav = Uav::find($id);
 
         if ($uav == null) {
             return back();
         }
 
-        $emails = USER::uavOwnersEmailsToList(false);
+        if ($uav->company != $user->company) {
+            return back();
+        }
+
+        $emails = UavOwner::emailsToList(false);
 
         return view('uavs.edit', [
             'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
-                '/uavs/' . $id . '/edit' => 'Edit',
+                '/uavs/' . $id . '/view' => $uav->name,
+                '/uavs/' . $id . '/edit' => __('Edit'),
             ],
             'selected_menu' => MainMenu::UAVS,
             'selected_nav' => 'edit',
@@ -148,10 +181,86 @@ class UavController extends Controller
     }
 
     /**
+     * Analytics of UAV
+     */
+    public function analytics(Request $request, $id)
+    {
+        $uav = Uav::find($id);
+
+        if ($uav == null) {
+            return back();
+        }
+
+        $i = 1;
+        $year = $request->input('datepicker_years');
+        $selected_option = $request->input('option_id');
+        $options = AnalyticsOption::uavsOptionsToList(true);
+        $sessions_monthly = [];
+        $month_numbers_str = [
+            '01',
+            '02',
+            '03',
+            '04',
+            '05',
+            '06',
+            '07',
+            '08',
+            '09',
+            '10',
+            '11',
+            '12',
+        ];
+
+        if (empty($year)) {
+            $tz = 'Europe/Athens';
+            $timestamp = time();
+            $datetime_now = new DateTime("now", new DateTimeZone($tz));
+            $datetime_now->setTimestamp($timestamp);
+            $year = $datetime_now->format('Y');
+        }
+
+        $sessions = ChargingSession::where('uav_id', $uav->id)
+            ->whereYear('date_time_end', $year)
+            ->get();
+
+        foreach ($month_numbers_str as $month_number_str) {
+            $last_day = cal_days_in_month(CAL_GREGORIAN, $i, $year);
+            $sessions_monthly[$i] = 0;
+
+            foreach ($sessions->whereBetween('date_time_end', [$year . '-' .
+                $month_number_str . '-01 00:00:00', $year . '-' . $month_number_str . '-' . $last_day .
+                '23:59:59']) as $session) {
+
+                $sessions_monthly[$i]++;
+            }
+
+            $i++;
+        }
+
+        return view('uavs.analytics', [
+            'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+            'breadcrumbs' => [
+                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
+                '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
+                '/uavs/' . $id . '/view' => $uav->name,
+                '/uavs/' . $id . '/analytics' => __('Analytics'),
+            ],
+            'selected_menu' => MainMenu::UAVS,
+            'selected_nav' => 'analytics',
+            'uav' => $uav,
+            'sessions_monthly' => $sessions_monthly,
+            'year' => $year,
+            'options' => $options,
+            'selected_option' => $selected_option,
+        ]);
+    }
+
+    /**
      * Store new UAV
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $uav = new Uav();
         $validator = $uav->validation($request, 'create');
 
@@ -169,7 +278,8 @@ class UavController extends Controller
         }
 
         $uav->name = $request->input('name');
-        $uav->owner_user_id = $request->input('user_id');
+        $uav->owner_id = $request->input('user_id');
+        $uav->company_id = $user->company_id;
 
         $uav->save();
 
@@ -210,7 +320,7 @@ class UavController extends Controller
         }
 
         $uav->name = $request->input('name');
-        $uav->owner_user_id = $request->input('user_id');
+        $uav->owner_id = $request->input('user_id');
 
         $uav->save();
 
@@ -311,5 +421,28 @@ class UavController extends Controller
         ];
 
         return response()->json($response, 200);
+    }
+
+    /**
+     * Delete UAV
+     */
+    public function delete($id)
+    {
+        $uav = Uav::find($id);
+
+        if ($uav == null) {
+            return back();
+        }
+
+        $uav->delete();
+
+        $alerts[] = [
+            'message' => __('UAV successfully deleted.'),
+            'class' => __('alert bg-warning'),
+        ];
+
+        return redirect('/uavs')->with([
+            'alerts' => $alerts,
+        ]);
     }
 }

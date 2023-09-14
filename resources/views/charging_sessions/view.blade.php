@@ -15,8 +15,14 @@
                                     <td> {{ $session->id }} </td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left"> {{ __('Charging Company') }} </th>
-                                    <td> {{ $session->station->company->name }} </td>
+                                    @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                        <th class="text-left"> {{ __('Charging Company') }} </th>
+                                        <td>
+                                            <a href="{{ url('/charging-companies/' . $session->station->company->id . '/view') }}">
+                                                {{ $session->station->company->name }}
+                                            </a>
+                                        </td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <th class="text-left"> {{ __('Station\'s Name') }} </th>
@@ -37,8 +43,8 @@
                                 <tr>
                                     <th class="text-left"> {{ __('UAV Owner\'s Email') }} </th>
                                     <td>
-                                        <a href="{{ url('/users/uav-owners/' . $session->uav->user->id . '/view') }}">
-                                            {{ $session->uav->user->email }}
+                                        <a href="{{ url('/users/uav_owners/' . $session->uav->uavOwner->id . '/view') }}">
+                                            {{ $session->uav->uavOwner->email }}
                                         </a>
                                     </td>
                                 </tr>
@@ -75,7 +81,7 @@
                                                 <em class="fa fa-battery-full"></em>
                                             @endif
                                         @endif
-                                        {{ $session->uav->charging_percentage }}
+                                        {{ $session->uav->charging_percentage . '%' }}
                                     </td>
                                 </tr>
                                 <tr>

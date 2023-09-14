@@ -6,6 +6,12 @@ $(".sidebar span.icon").find('em:first').addClass("fa-plus");
 $('#calendar').datepicker({
 		});
 
+$("#datepicker_years").datepicker( {
+    format: " yyyy", // Notice the Extra space at the beginning
+    viewMode: "years",
+    minViewMode: "years"
+});
+
 $("#menu-toggle").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");

@@ -2,12 +2,13 @@
 
 @section('content')
 
-    @include('users.uav_owners.partials.filter')
+    @include('users.company_administrators.partials.filter')
 
     <div class="row">
         <div class="col-lg-6 mb-sm-4 mb-lg-0">
             @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
-                <a href="{{ url('/users/' . $type . '/create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ __('Add New User') }} </a>
+                <a href="{{ url('/users/' . $type . '/create') }}" class="btn btn-primary"><span
+                        class="fa fa-plus"></span> {{ __('Add New User') }} </a>
             @endif
         </div>
         <div class="col-lg-6 mb-sm-4 mb-lg-0">
@@ -17,7 +18,8 @@
                     <span class="input-group-prepend">
                         <button class="btn btn-primary" type="button" title=""><i class="fa fa-search"></i></button>
                     </span>
-                    <input type="text" class="form-control" name="search" value="{{ @$search['search'] }}" placeholder="{{ __('Search') }}">
+                    <input type="text" class="form-control" name="search" value="{{ @$search['search'] }}"
+                           placeholder="{{ __('Search') }}">
                 </div>
             </form>
         </div>
@@ -26,19 +28,22 @@
 
     <div class="card mb-4">
         <div class="card-block">
-{{--            <h3 class="card-title">Recent Orders</h3>--}}
+            {{--            <h3 class="card-title">Recent Orders</h3>--}}
             @if (count($users) > 0)
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
-                                <th> {{ __('Email') }} </th>
-                                <th> {{ __('Full name') }} </th>
-                                <th> {{ __('Mobile Phone') }} </th>
-                                @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
-                                    <th colspan="2" class=""> {{ __('Actions') }} </th>
-                                @endif
-                            </tr>
+                        <tr>
+                            <th> {{ __('Email') }} </th>
+                            <th> {{ __('Full Name') }} </th>
+                            <th> {{ __('Mobile Phone') }} </th>
+                            @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                <th> {{ __('Company\'s Name') }} </th>
+                            @endif
+                            @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
+                                <th colspan="2" class=""> {{ __('Actions') }} </th>
+                            @endif
+                        </tr>
                         </thead>
                         <tbody>
 
@@ -49,6 +54,11 @@
                                 </td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->msisdn }}</td>
+                                @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                    <td>
+                                        <a href="{{ url('/companies/' . $user->company->id . '/view') }}"> {{ $user->company->name }} </a>
+                                    </td>
+                                @endif
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_USERS))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"

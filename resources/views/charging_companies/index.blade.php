@@ -6,9 +6,9 @@
 
     <div class="row">
         <div class="col-lg-6 mb-sm-4 mb-lg-0">
-            {{--@if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS))
-                <a href="{{ url('/charging_companies/create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ __('Add New Uav') }} </a>
-            @endif--}}
+            @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_COMPANIES))
+                <a href="{{ url('/charging-companies/create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ __('Add New Company') }} </a>
+            @endif
         </div>
         <div class="col-lg-6 mb-sm-4 mb-lg-0">
             <form class="form-inline float-right" action="{{ url('charging-companies/search') }}" method="POST">
@@ -35,9 +35,9 @@
                         <tr>
                             <th> {{ __('Name') }} </th>
                             <th> {{ __('Number Of Owned Charging Stations') }} </th>
-                            {{--@if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS))
+                            @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_COMPANIES))
                                 <th colspan="2" class=""> {{ __('Actions') }} </th>
-                            @endif--}}
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
@@ -45,24 +45,27 @@
                         @foreach ($companies as $company)
                             <tr>
                                 <td>
-                                    {{ $company->name }}
+                                    <a href="{{ url('/charging-companies/' . $company->id . '/view') }}"> {{ $company->name }} </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('/charging-companies/' . $company->id . '/charging-stations') }}">
-                                        {{ $company->stations != null ? count($company->stations) : '-' }}
-                                    </a>
+                                    @if (count($company->stations) != 0)
+                                        {{ count($company->stations) }}
+
+                                    @else
+                                        {{ '0' }}
+                                    @endif
                                 </td>
-                                {{--@if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAVS))
+                                @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_COMPANIES))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"
-                                                onclick="window.location.href='{{ url('/uavs/' . $company->id . '/edit') }}'">
+                                                onclick="window.location.href='{{ url('/charging-companies/' . $company->id . '/edit') }}'">
                                             <span class="fa fa-edit"></span>&nbsp;{{ __('Edit') }}
                                         </button>
                                     </td>
                                     <td>
-                                        {!! delete_form(url('uavs/' . $company->id)) !!}
+                                        {!! delete_form(url('charging-companies/' . $company->id)) !!}
                                     </td>
-                                @endif--}}
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>

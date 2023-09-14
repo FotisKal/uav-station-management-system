@@ -27,7 +27,7 @@ class Url
     public static $url_parts = [
         self::USERS => [
             UserRole::ADMINISTRATOR => 'admins',
-            UserRole::SIMPLE_USER => 'uav-owners',
+            UserRole::SIMPLE_USER => 'company-admins',
         ],
     ];
 }

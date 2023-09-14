@@ -15,10 +15,11 @@ class CreateUavs extends Migration
     {
         Schema::create('uavs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('owner_user_id');
+            $table->string('owner_id');
+            $table->string('company_id');
             $table->string('name');
-            $table->string('charging_percentage');
-            $table->text('position_json');
+            $table->integer('charging_percentage')->nullable();
+            $table->text('position_json')->nullable();
             $table->string('api_token', 80)->unique()->nullable();
             $table->timestamps();
         });

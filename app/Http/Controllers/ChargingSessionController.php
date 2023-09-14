@@ -9,10 +9,13 @@ use App\Uavsms\ChargingSession\ChargingSession;
 use App\Uavsms\ChargingSession\ChargingSessionCost;
 use App\Uavsms\ChargingStation\ChargingStation;
 use App\Uavsms\Uav\Uav;
+use App\Uavsms\UavOwner\UavOwner;
 use App\User;
+use App\UserRole;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ChargingSessionController extends Controller
@@ -25,10 +28,27 @@ class ChargingSessionController extends Controller
         $token = $request->input('token');
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
 
-        $sessions = ChargingSession::filter($search)
-            ->with('station')
-            ->orderBy('id')
-            ->paginate(PerPage::get());
+        $user = Auth::user();
+
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $sessions = ChargingSession::join('charging_stations', 'charging_sessions.charging_station_id', '=', 'charging_stations.id')
+                ->select('charging_sessions.*', 'charging_stations.name as charging_stations_name', 'charging_stations.id as charging_stations_id')
+                ->filter($search)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+            $companies_names = ChargingCompany::namesToList(true);
+
+        } else if ($user->role_id == UserRole::SIMPLE_USER_ID) {
+            $sessions = ChargingSession::join('charging_stations', 'charging_sessions.charging_station_id', '=', 'charging_stations.id')
+                ->select('charging_sessions.*', 'charging_stations.name as charging_stations_name', 'charging_stations.id as charging_stations_id')
+                ->where('company_id', $user->company_id)
+                ->filter($search)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+            $companies_names = null;
+        }
 
         return view('charging_sessions.index', [
             'page_title' => MainMenu::$menu_items[MainMenu::CHARGING_SESSIONS]['title'],
@@ -40,8 +60,8 @@ class ChargingSessionController extends Controller
             'token' => $token,
             'sessions' => $sessions,
             'station_names' => ChargingStation::namesToList(true),
-            'companies_names' => ChargingCompany::namesToList(true),
-            'emails' => User::uavOwnersEmailsToList(true),
+            'companies_names' => $companies_names,
+            'emails' => UavOwner::emailsToList(true),
         ]);
     }
 
@@ -85,7 +105,14 @@ class ChargingSessionController extends Controller
      */
     public function view($id)
     {
-        $session = ChargingSession::find($id);
+        $user = Auth::user();
+        $session = ChargingSession::join('charging_stations', 'charging_sessions.charging_station_id', '=', 'charging_stations.id')
+            ->where('charging_sessions.id', $id)
+            ->first();
+
+        if ($session->company_id != $user->company_id) {
+            return back();
+        }
 
         if ($session == null) {
             return back();
@@ -96,7 +123,7 @@ class ChargingSessionController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-sessions' => MainMenu::$menu_items[MainMenu::CHARGING_SESSIONS]['title'],
-                '/charging-sessions/' . $id . '/view' => 'View',
+                '/charging-sessions/' . $id . '/view' => 'Charging Session With Id ' . $session->id,
             ],
             'selected_menu' => MainMenu::CHARGING_SESSIONS,
             'selected_nav' => 'view',
@@ -161,6 +188,38 @@ class ChargingSessionController extends Controller
         $charging_station = $request->user();
         $uav_id = $request->json('uav_id');
 
+        $session = new ChargingSession();
+        $validator = $session->apiValidation($request, 'store_session');
+
+        if ($validator->fails()) {
+            $response = [
+                'charging_session_created' => false,
+                'message' => __($validator->errors()->first()),
+            ];
+
+            return response()->json($response, 409);
+        }
+
+        $uav = Uav::find($uav_id);
+
+        if ($uav == null) {
+            $response = [
+                'charging_session_created' => false,
+                'message' => __('With with id: ' . $uav_id . ' not found.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
+        if ($uav->company_id != $charging_station->company_id) {
+            $response = [
+                'charging_session_created' => false,
+                'message' => __('Charging Station and Uav do not belong to the same Charging Company.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
         $charging_sessions = ChargingSession::where('charging_station_id', $charging_station->id)
             ->where('uav_id', $uav_id)
             ->where('date_time_end', null)
@@ -180,8 +239,6 @@ class ChargingSessionController extends Controller
         $datetime_now = new DateTime("now", new DateTimeZone($tz));
         $datetime_now->setTimestamp($timestamp);
         $datetime_now_str = $datetime_now->format('Y-m-d H:i:s');
-
-        $session = new ChargingSession();
 
         $session->charging_station_id = $charging_station->id;
         $session->uav_id = $uav_id;
@@ -205,6 +262,6 @@ class ChargingSessionController extends Controller
             'message' => __('New Charging Session is created.'),
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response, 201);
     }
 }

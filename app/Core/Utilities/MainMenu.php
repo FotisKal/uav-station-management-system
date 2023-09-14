@@ -25,6 +25,8 @@ class MainMenu
 
     const SIMPLE_USERS = 'simple_users';
 
+    const UAV_OWNERS = 'uav_owners';
+
     const UAVS = 'uavs';
 
     const CHARGING_COMPANIES = 'charging_companies';
@@ -59,17 +61,27 @@ class MainMenu
                     'title' => UserRole::ADMINISTRATORS_TITLE,
                     'url' => '/users/admins',
                     'permissions' => [
-                        Permission::CAN_VIEW_USERS,
+                        Permission::CAN_VIEW_ADMINISTRATORS,
                     ],
                 ],
                 self::SIMPLE_USERS => [
                     'icon' => 'fa-rss',
                     'title' => UserRole::SIMPLE_USERS_TITLE,
-                    'url' => '/users/uav-owners',
+                    'url' => '/users/company-admins',
                     'permissions' => [
                         Permission::CAN_VIEW_USERS,
                     ],
                 ],
+            ],
+        ],
+        self::UAV_OWNERS => [
+            'icon' => 'fa-cubes',
+            'title' => 'UAV Owners',
+            'url' => '/uav-owners',
+            'permissions' => [
+                Permission::CAN_VIEW_UAV_OWNERS,
+            ],
+            'sub_items' => [
             ],
         ],
         self::UAVS => [

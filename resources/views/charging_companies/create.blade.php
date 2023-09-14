@@ -9,11 +9,11 @@
                     <div class="card mb-4">
                         <div class="card-block">
                             <h3 class="card-title"> {{ __('Create') }} </h3>
-                            <form class="form" action="{{ url('/users/' . App\Core\Utilities\Url::$url_parts[App\Core\Utilities\Url::USERS][App\UserRole::SIMPLE_USER]) }}" method="POST">
+                            <form class="form" action="{{ url('/charging-companies') }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('POST') }}
 
-                                @include('users.uav_owners.partials.form', [
+                                @include('charging_companies.partials.form', [
                                     'action' => 'create',
                                 ])
 

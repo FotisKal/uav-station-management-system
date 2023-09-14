@@ -31,16 +31,24 @@ class PositionType
     /**
      * All Types
      */
-    public static function ToList($default_first_val = false)
+    public static function ToList($default_first_val = false, $with_keys = false)
     {
         $data = [];
+        $counter = 0;
 
         if ($default_first_val) {
-            $data[0] = __('Select Position Type');
+            $data[$counter] = __('Select Position Type');
         }
 
-        foreach (self::$permissions_config as $key => $permission) {
-            $data[$key] = $permission;
+        if ($with_keys) {
+            foreach (self::$permissions_config as $key => $permission) {
+                $data[$key] = $permission;
+            }
+
+        } else {
+            foreach (self::$permissions_config as $permission) {
+                $data[++$counter] = $permission;
+            }
         }
 
         return $data;

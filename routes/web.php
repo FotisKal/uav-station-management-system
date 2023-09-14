@@ -32,17 +32,24 @@ Route::group(['middleware' => [
             Route::get('/users/{type}', 'UserController@index');
             Route::post('/users/{type}/search', 'UserController@search');
 
+            Route::get('/uav-owners', 'UavOwnerController@index');
+            Route::post('/uav-owners/search', 'UavOwnerController@search');
+
             Route::get('/uavs', 'UavController@index');
             Route::post('/uavs/search', 'UavController@search');
-
-            Route::get('/charging-companies', 'ChargingCompanyController@index');
-            Route::post('/charging-companies/search', 'ChargingCompanyController@search');
 
             Route::get('/charging-stations', 'ChargingStationController@index');
             Route::post('/charging-stations/search', 'ChargingStationController@search');
 
             Route::get('/charging-sessions', 'ChargingSessionController@index');
             Route::post('/charging-sessions/search', 'ChargingSessionController@search');
+
+            Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_COMPANIES]], function () {
+
+                Route::get('/charging-companies', 'ChargingCompanyController@index');
+                Route::post('/charging-companies/search', 'ChargingCompanyController@search');
+
+            });
 
         });
 
@@ -61,6 +68,24 @@ Route::group(['middleware' => [
             Route::put('/users/{type}/{user_id}', 'UserController@save');
 
             Route::delete('/users/{type}/{user_id}', 'UserController@delete');
+
+        });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_UAV_OWNERS]], function () {
+
+            Route::get('/uav-owners/{id}/view', 'UavOwnerController@view');
+
+        });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_UAV_OWNERS]], function () {
+
+            Route::get('/uav-owners/create', 'UavOwnerController@create');
+            Route::post('/uav-owners/', 'UavOwnerController@store');
+
+            Route::get('/uav-owners/{id}/edit', 'UavOwnerController@edit');
+            Route::put('/uav-owners/{id}', 'UavOwnerController@save');
+
+            Route::delete('/uav-owners/{id}', 'UavOwnerController@delete');
 
         });
 
@@ -114,6 +139,24 @@ Route::group(['middleware' => [
 
             Route::get('/charging-sessions/create', 'ChargingSessionController@create');
             Route::post('/charging-sessions', 'ChargingSessionController@store');
+
+        });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_VIEW_COMPANIES]], function () {
+            Route::get('/charging-companies/{id}/view', 'ChargingCompanyController@view');
+
+            Route::get('/charging-companies/{id}/analytics', 'ChargingCompanyController@analytics');
+        });
+
+        Route::group(['middleware' => ['permission:' . \App\Uavsms\UserRole\Permission::CAN_MANAGE_COMPANIES]], function () {
+
+            Route::get('/charging-companies/create', 'ChargingCompanyController@create');
+            Route::post('/charging-companies', 'ChargingCompanyController@store');
+
+            Route::get('/charging-companies/{id}/edit', 'ChargingCompanyController@edit');
+            Route::put('/charging-companies/{id}', 'ChargingCompanyController@save');
+
+            Route::delete('/charging-companies/{id}', 'ChargingCompanyController@delete');
 
         });
     });

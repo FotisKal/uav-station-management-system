@@ -18,8 +18,9 @@ class UsersTableSeeder extends Seeder
         $data = [
             [
             'role_id' => '1',
+            'company_id' => '0',
             'name' => 'Fotis Kal',
-            'email' => 'f.kalokiris@example.gr',
+            'email' => 'super_admin@charging-stations.gr',
             'msisdn' => '306900000005',
             'email_verified_at' => date('Y-m-d H:i:s'),
             'password' => 'demo1234',
@@ -30,8 +31,9 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'role_id' => '100',
-                'name' => 'Random Uav Owner',
-                'email' => 'r.uav.user_0@example.gr',
+                'company_id' => '1',
+                'name' => 'Company\'s 1 Admin',
+                'email' => 'admin@company-1.gr',
                 'msisdn' => '306900000006',
                 'email_verified_at' => date('Y-m-d H:i:s'),
                 'password' => 'demo1234',
@@ -42,8 +44,9 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'role_id' => '100',
-                'name' => 'Random Uav Owner 2',
-                'email' => 'r.uav.user_1@example.gr',
+                'company_id' => '2',
+                'name' => 'Company\'s 2 Admin',
+                'email' => 'admin@company-2.gr',
                 'msisdn' => '306900000007',
                 'email_verified_at' => date('Y-m-d H:i:s'),
                 'password' => 'demo1234',
@@ -54,8 +57,9 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'role_id' => '100',
-                'name' => 'Random Uav Owner 3',
-                'email' => 'r.uav.user_2@example.gr',
+                'company_id' => '3',
+                'name' => 'Company\'s 3 Admin',
+                'email' => 'admin@company-3.gr',
                 'msisdn' => '306900000008',
                 'email_verified_at' => date('Y-m-d H:i:s'),
                 'password' => 'demo1234',
@@ -69,6 +73,7 @@ class UsersTableSeeder extends Seeder
         foreach ($data as $v) {
             $user = new User();
             $user->role_id = $v['role_id'];
+            $user->company_id = $v['company_id'];
             $user->name = $v['name'];
             $user->email = $v['email'];
             $user->msisdn = $v['msisdn'];

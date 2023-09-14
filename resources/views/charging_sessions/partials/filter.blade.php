@@ -23,10 +23,12 @@
                             <label for="station_id" class="col-form-label"> {{ __('Charging Stations') }}: </label>
                             {!! selectbox('station_id', 'station_id', $station_names, 0) !!}
                         </div>
-                        <div class="col-3 col-md-3 col-lg-3 col-xl-3">
-                            <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
-                                {!! selectbox('company_id', 'company_id', $companies_names, 0) !!}
-                        </div>
+                        @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                            <div class="col-3 col-md-3 col-lg-3 col-xl-3">
+                                <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
+                                    {!! selectbox('company_id', 'company_id', $companies_names, 0) !!}
+                            </div>
+                        @endif
                         <div class="col-3 col-md-3 col-lg-3 col-xl-3">
                             <label for="user_id" class="col-form-label"> {{ __('Uav Owners\' Emails') }}: </label>
                             {!! selectbox('user_id', 'user_id', $emails, 0) !!}

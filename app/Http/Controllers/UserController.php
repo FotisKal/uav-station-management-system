@@ -7,9 +7,11 @@ use App\Core\Utilities\DatetimeFormat;
 use App\Core\Utilities\MainMenu;
 use App\Core\Utilities\PerPage;
 use App\Core\Utilities\Url;
+use App\Uavsms\ChargingCompany\ChargingCompany;
 use App\User;
 use App\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -26,6 +28,13 @@ class UserController extends Controller
             return back();
         }
 
+        $user = Auth::user();
+
+        if ($type == $url_parts[UserRole::ADMINISTRATOR] &&
+            $user->role_id == UserRole::SIMPLE_USER_ID) {
+            return back();
+        }
+
         $token = $request->input('token');
         $search = session('search_' . $token) != null ? session('search_' . $token) : [];
 
@@ -35,18 +44,35 @@ class UserController extends Controller
                 ->orderBy('id')
                 ->paginate(PerPage::get());
 
+            $names = null;
+
             $key = MainMenu::ADMINS;
             $role_title = UserRole::ADMINISTRATORS_TITLE;
             $view_dir = 'administrators';
+
         } else if ($type == $url_parts[UserRole::SIMPLE_USER]) {
-            $users = User::filter($search)
-                ->where('role_id', UserRole::SIMPLE_USER_ID)
-                ->orderBy('id')
-                ->paginate(PerPage::get());
+            if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+                $users = User::filter($search)
+                    ->where('role_id', UserRole::SIMPLE_USER_ID)
+                    ->with('company')
+                    ->orderBy('id')
+                    ->paginate(PerPage::get());
+
+                $names = ChargingCompany::namesToList(true);
+
+            } else if ($user->role_id == UserRole::SIMPLE_USER_ID) {
+                $users = User::filter($search)
+                    ->where('role_id', UserRole::SIMPLE_USER_ID)
+                    ->where('company_id', $user->company_id)
+                    ->orderBy('id')
+                    ->paginate(PerPage::get());
+
+                $names = null;
+            }
 
             $key = MainMenu::SIMPLE_USERS;
             $role_title = UserRole::SIMPLE_USERS_TITLE;
-            $view_dir = 'uav_owners';
+            $view_dir = 'company_administrators';
         }
 
         return view('users.' . $view_dir . '.index', [
@@ -59,6 +85,7 @@ class UserController extends Controller
             'token' => $token,
             'users' => $users,
             'type' => $type,
+            'names' => $names,
         ]);
     }
 
@@ -92,7 +119,7 @@ class UserController extends Controller
             $key = MainMenu::ADMINS;
             $role_title = UserRole::ADMINISTRATORS_TITLE;
         }  elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
-            $view_dir = 'uav_owners';
+            $view_dir = 'company_administrators';
             $key = MainMenu::SIMPLE_USERS;
             $role_title = UserRole::SIMPLE_USERS_TITLE;
         }
@@ -124,9 +151,22 @@ class UserController extends Controller
             return back();
         }
 
-        $user = User::find($id);
+        $user_auth = Auth::user();
+
+        if ($user_auth->role_id == UserRole::ADMINISTRATOR_ID) {
+            $user = User::find($id);
+        } else if ($user_auth->role_id == UserRole::SIMPLE_USER_ID) {
+            $user = User::where('id', $id)
+                ->where('company_id', $user_auth->company_id)
+                ->first();
+        }
 
         if ($user == null) {
+            return back();
+        }
+
+        if ($user_auth->role_id != UserRole::ADMINISTRATOR_ID &&
+            $user->role_id == UserRole::ADMINISTRATOR_ID) {
             return back();
         }
 
@@ -135,7 +175,7 @@ class UserController extends Controller
             $key = MainMenu::ADMINS;
             $role_title = UserRole::ADMINISTRATORS_TITLE;
         } elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
-            $view_dir = 'uav_owners';
+            $view_dir = 'company_administrators';
             $key = MainMenu::SIMPLE_USERS;
             $role_title = UserRole::SIMPLE_USERS_TITLE;
         }
@@ -175,7 +215,7 @@ class UserController extends Controller
             $key = MainMenu::ADMINS;
             $role_title = UserRole::ADMINISTRATORS_TITLE;
         }  elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
-            $view_dir = 'uav_owners';
+            $view_dir = 'company_administrators';
             $key = MainMenu::SIMPLE_USERS;
             $role_title = UserRole::SIMPLE_USERS_TITLE;
         }

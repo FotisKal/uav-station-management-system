@@ -6,7 +6,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card text-center bg-default">
 
-                @include('users.uav_owners.partials.nav')
+                @include('users.company_administrators.partials.nav')
 
                 <div class="card-block">
                     <h3 class="card-title"> {{ __('Edit') }} </h3>
@@ -16,7 +16,7 @@
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
 
-                        @include('users.uav_owners.partials.form', [
+                        @include('users.company_administrators.partials.form', [
                             'action' => 'edit',
                         ])
 

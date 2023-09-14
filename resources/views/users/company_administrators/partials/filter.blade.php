@@ -14,6 +14,12 @@
                 @csrf
                 <div class="card-body">
                     <div class="row">
+                        @if(\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                                <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
+                                {!! selectbox('company_id', 'company_id', $names, 0) !!}
+                            </div>
+                        @endif
                         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                             <label for="email" class="col-form-label"> {{ __('Email') }}: </label>
                             <input type="text" name="email" id="email" class="form-control" value="{{ @$search['email'] }}">

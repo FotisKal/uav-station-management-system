@@ -5,6 +5,7 @@ namespace App\Uavsms\ChargingSession;
 use App\Uavsms\ChargingStation\ChargingStation;
 use App\Uavsms\Uav\Uav;
 use Illuminate\Database\Eloquent\Model;
+use Validator;
 
 class ChargingSession extends Model
 {
@@ -122,6 +123,28 @@ class ChargingSession extends Model
             'user_id.required' => __('The UAV Owner can\'t be empty'),
             'user_id.integer' => __('The UAV Owner Id must be a number'),
             'user_id.exists' => __('The UAV Owner must be an existing one'),
+        ];
+
+        return Validator::make($request->all(), $rules, $messages);
+    }
+
+    /**
+     * Api Validation
+     */
+    public function apiValidation($request, $action = '', $id = null)
+    {
+        if ($action == 'store_session') {
+            $rules = [
+                'uav_id' => [
+                    'required',
+                    'integer',
+                ],
+            ];
+        }
+
+        $messages = [
+            'uav_id.required' => __('The Uav Id can\'t be empty'),
+            'uav_id.integer' => __('The Uav Id must be an integer'),
         ];
 
         return Validator::make($request->all(), $rules, $messages);

@@ -3,6 +3,7 @@
 namespace App\Uavsms\ChargingCompany;
 
 use Illuminate\Database\Eloquent\Model;
+use Validator;
 
 class ChargingCompany extends Model
 {
@@ -42,7 +43,7 @@ class ChargingCompany extends Model
     {
         $data = [];
 
-        $companies = self::get();
+        $companies = self::all();
 
         if ($default_first_val) {
             $data[0] = __('Select Company\'s Name');
@@ -53,5 +54,28 @@ class ChargingCompany extends Model
         }
 
         return $data;
+    }
+
+    /**
+     * Validation
+     */
+    public function validation($request, $action = '', $id = null)
+    {
+        $rules = [
+            'name' => [
+                'required',
+                'max:50',
+                'unique:charging_companies',
+            ],
+        ];
+
+        $messages = [
+            'name' => __('Invalid name'),
+            'name.required' => __('The name can\'t be empty'),
+            'name.max' => __('The name can\'t be longer than 50 characters'),
+            'name.unique' => __('The name has to be unique'),
+        ];
+
+        return Validator::make($request->all(), $rules, $messages);
     }
 }

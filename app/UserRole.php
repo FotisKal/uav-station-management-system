@@ -16,9 +16,9 @@ class UserRole
 
     const ADMINISTRATOR_TITLE = 'Administrator';
 
-    const SIMPLE_USER_TITLE = 'UAV Owner';
+    const SIMPLE_USER_TITLE = 'Company\'s Administrator';
 
-    const SIMPLE_USERS_TITLE = 'UAV Owners';
+    const SIMPLE_USERS_TITLE = 'Company\'s Administrators';
 
     const ADMINISTRATORS_TITLE = 'Administrators';
 
@@ -33,10 +33,10 @@ class UserRole
             'id' => self::ADMINISTRATOR_ID,
             'locked' => true,
             'permissions' => [
-                Permission::ADMINISTRATION,
                 Permission::CAN_ACCESS_PANEL,
                 Permission::CAN_VIEW_ROLES,
                 Permission::CAN_MANAGE_ROLES,
+                Permission::CAN_VIEW_ADMINISTRATORS,
                 Permission::CAN_VIEW_USERS,
                 Permission::CAN_MANAGE_USERS,
                 Permission::CAN_VIEW_CONTENT,
@@ -46,9 +46,12 @@ class UserRole
                 Permission::CAN_VIEW_FILE_MANAGER,
                 Permission::CAN_VIEW_SESSIONS,
                 Permission::CAN_MANAGE_SESSIONS,
+                Permission::CAN_VIEW_UAV_OWNERS,
+                Permission::CAN_MANAGE_UAV_OWNERS,
                 Permission::CAN_VIEW_UAVS,
                 Permission::CAN_MANAGE_UAVS,
                 Permission::CAN_VIEW_COMPANIES,
+                Permission::CAN_MANAGE_COMPANIES,
                 Permission::CAN_VIEW_STATIONS,
                 Permission::CAN_MANAGE_STATIONS,
             ],
@@ -59,6 +62,25 @@ class UserRole
             'locked' => true,
             'permissions' => [
                 Permission::SIMPLE_USER,
+                Permission::CAN_ACCESS_PANEL,
+                Permission::CAN_VIEW_ROLES,
+                /*Permission::CAN_MANAGE_ROLES,*/
+                Permission::CAN_VIEW_USERS,
+                /*Permission::CAN_MANAGE_USERS,*/
+                Permission::CAN_VIEW_CONTENT,
+                /*Permission::CAN_MANAGE_CONTENT,*/
+                Permission::CAN_VIEW_DYNAMIC_VARIABLES,
+                /*Permission::CAN_MANAGE_DYNAMIC_VARIABLES,*/
+                Permission::CAN_VIEW_FILE_MANAGER,
+                Permission::CAN_VIEW_SESSIONS,
+                /*Permission::CAN_MANAGE_SESSIONS,*/
+                Permission::CAN_VIEW_UAV_OWNERS,
+                Permission::CAN_MANAGE_UAV_OWNERS,
+                Permission::CAN_VIEW_UAVS,
+                Permission::CAN_MANAGE_UAVS,
+                /*Permission::CAN_VIEW_COMPANIES,*/
+                Permission::CAN_VIEW_STATIONS,
+                Permission::CAN_MANAGE_STATIONS,
             ],
         ],
     ];

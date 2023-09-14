@@ -14,6 +14,8 @@
 <script src="{{ asset('js/easypiechart.js') }}"></script>
 <script src="{{ asset('js/easypiechart-data.js') }}"></script>
 <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
 <script src="{{ asset('js/custom.js') }}"></script>
 
 
