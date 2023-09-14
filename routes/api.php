@@ -20,5 +20,13 @@ use Illuminate\Http\Request;
 Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('/charging-sessions/create', 'ChargingSessionController@apiStore');
+    
+});
+
+Route::group(['middleware' => ['auth:api_uavs']], function () {
+
+    Route::put('/uavs/position', 'UavController@apiSavePosition');
+
+    Route::put('/uavs/battery-level', 'UavController@apiSaveBatteryLevel');
 
 });
