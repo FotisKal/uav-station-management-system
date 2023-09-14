@@ -225,73 +225,91 @@ class UavController extends Controller
     }
 
     /**
-     * Delete UAV
+     * API Save UAV's new Position
      */
-    public function delete($id)
+    public function apiSavePosition(Request $request)
     {
-        $uav = Uav::find($id);
+        $uav_generic = $request->user();
 
-        if ($uav == null) {
-            return back();
-        }
-
-        $uav->delete();
-
-        $alerts[] = [
-            'message' => __('UAV successfully deleted.'),
-            'class' => __('alert bg-warning'),
+        $position = [
+            'x' => $request->json('position_x'),
+            'y' => $request->json('position_y')
         ];
 
-        return redirect('/uavs')->with([
-            'alerts' => $alerts,
-        ]);
+        $uav = Uav::find($uav_generic->id);
+
+        if ($uav == null) {
+            $response = [
+                'uav_updated' => false,
+                'message' => __('With with id: ' . $uav_generic->id . ' not found.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
+        $validator = $uav->apiValidation($request, 'save_position');
+
+        if ($validator->fails()) {
+            $response = [
+                'uav_updated' => false,
+                'message' => __($validator->errors()->first()),
+            ];
+
+            return response()->json($response, 409);
+        }
+
+        $uav->position_json = $position;
+
+        $uav->save();
+
+        $response = [
+            'uav_updated' => true,
+            'message' => __('Uav\'s Position is updated.'),
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**
-     * Analytics of UAV
+     * API Save UAV's new Battery Level
      */
-    public function analytics($id)
+    public function apiSaveBatteryLevel(Request $request)
     {
-        $uav = Uav::find($id);
+        $uav_generic = $request->user();
+
+        $battery_level = $request->input('battery_level');
+
+        $uav = Uav::find($uav_generic->id);
 
         if ($uav == null) {
-            return back();
+            $response = [
+                'uav_updated' => false,
+                'message' => __('With with id: ' . $uav_generic->id . ' not found.'),
+            ];
+
+            return response()->json($response, 200);
         }
 
-        $tz = 'Europe/Athens';
-        $timestamp = time();
-        $datetime_now = new DateTime("now", new DateTimeZone($tz));
-        $datetime_now->setTimestamp($timestamp);
-        $year_now_str = $datetime_now->format('Y');
+        $validator = $uav->apiValidation($request, 'save_battery_level');
 
-        $sessions_qb = ChargingSession::where('uav_id', $uav->id)
-            ->whereYear('date_time_start', $year_now_str);
+        if ($validator->fails()) {
+            $response = [
+                'uav_updated' => false,
+                'message' => __($validator->errors()->first()),
+            ];
 
-        $sessions_monthly = [];
-
-        for ($i = 1; $i < 13; $i++) {
-            $sessions_monthly[$i] = $sessions_qb->whereMonth('date_time_start', $i)
-                ->whereNotNull('date_time_end')
-                ->get();
-
-            array_pop($sessions_qb->getQuery()->bindings['where']);
-
-            for ($j = 0; $j < 2; $j++) {
-                array_pop($sessions_qb->getQuery()->wheres);
-            }
+            return response()->json($response, 409);
         }
 
-        return view('uavs.analytics', [
-            'page_title' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
-            'breadcrumbs' => [
-                '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
-                '/uavs' => MainMenu::$menu_items[MainMenu::UAVS]['title'],
-                '/uavs/' . $id . '/analytics' => __('Analytics'),
-            ],
-            'selected_menu' => MainMenu::UAVS,
-            'selected_nav' => 'analytics',
-            'uav' => $uav,
-            'sessions_monthly' => $sessions_monthly,
-        ]);
+        $uav->charging_percentage = $battery_level;
+
+        $uav->save();
+
+        $response = [
+            'uav_updated' => true,
+            'message' => __('Uav\'s Battery Level is updated.'),
+        ];
+
+        return response()->json($response, 200);
     }
 }

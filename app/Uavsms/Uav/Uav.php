@@ -85,6 +85,58 @@ class Uav extends Model
     }
 
     /**
+     * Api Validation
+     */
+    public function apiValidation($request, $action = '', $id = null)
+    {
+        if ($action == 'save_position') {
+            $rules = [
+                'position_x' => [
+                    'required',
+                    'numeric',
+                    'min:-180',
+                    'max:180',
+                ],
+                'position_y' => [
+                    'required',
+                    'numeric',
+                    'min:-90',
+                    'max:90',
+                ],
+            ];
+
+        } elseif ($action == 'save_battery_level') {
+            $rules = [
+                'battery_level' => [
+                    'required',
+                    'numeric',
+                    'min:0',
+                    'max:100',
+                ],
+            ];
+        }
+
+        $messages = [
+            'position_x.required' => __('The Position X can\'t be empty'),
+            'position_x.numeric' => __('The Position X must be a number.'),
+            'position_x.min' => __('The Position X must be greater than -180.'),
+            'position_x.max' => __('The Position X must be lesser than 180.'),
+
+            'position_y.required' => __('The Position Y can\'t be empty'),
+            'position_y.numeric' => __('The Position Y must be a number.'),
+            'position_y.min' => __('The Position Y must be greater than -90.'),
+            'position_y.max' => __('The Position Y must be lesser than 90.'),
+
+            'battery_level.required' => __('The Battery Level can\'t be empty'),
+            'battery_level.numeric' => __('The Battery Level must be a number.'),
+            'battery_level.min' => __('The Battery Level must be greater or equal to 0.'),
+            'battery_level.max' => __('The Battery Level\'s max value is 100.'),
+        ];
+
+        return Validator::make($request->all(), $rules, $messages);
+    }
+
+    /**
      * All UAVs' Ids
      */
     public static function idsToList($default_first_val = false)
