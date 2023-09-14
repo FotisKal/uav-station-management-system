@@ -19,6 +19,7 @@ class CreateUavs extends Migration
             $table->string('name');
             $table->string('charging_percentage');
             $table->text('position_json');
+            $table->string('api_token', 80)->unique()->nullable();
             $table->timestamps();
         });
     }
