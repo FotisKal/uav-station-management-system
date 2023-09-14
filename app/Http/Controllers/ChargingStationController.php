@@ -230,6 +230,40 @@ class ChargingStationController extends Controller
     }
 
     /**
+     * API Save Station
+     */
+    public function apiSave(Request $request)
+    {
+        $charging_station_generic = $request->user();
+        $position = [
+            'x' => $request->json('position_x'),
+            'y' => $request->json('position_y')
+        ];
+
+        $charging_station = ChargingStation::find($charging_station_generic->id);
+
+        if ($charging_station == null) {
+            $response = [
+                'charging_station_updated' => false,
+                'message' => __('Charging Station with id: ' . $charging_station_generic->id . ' not found.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
+        $charging_station->position_json = $position;
+
+        $charging_station->save();
+
+        $response = [
+            'charging_station_updated' => true,
+            'message' => __('Charging Station\'s Position is updated.'),
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    /**
      * Delete Station
      */
     public function delete($id)
