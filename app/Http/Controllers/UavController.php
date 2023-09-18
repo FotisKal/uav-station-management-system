@@ -438,6 +438,21 @@ class UavController extends Controller
             return back();
         }
 
+        $sessions = ChargingSession::where('uav_id', $uav->id)
+            ->whereNull('date_time_end')
+            ->get();
+
+        if (count($sessions) > 0) {
+            $alerts[] = [
+                'message' => __('This UAV cannot be deleted, because it\'s in a Charging Session, right now.'),
+                'class' => __('alert bg-warning'),
+            ];
+
+            return redirect('/uavs')->with([
+                'alerts' => $alerts,
+            ]);
+        }
+
         $uav->delete();
 
         $alerts[] = [
