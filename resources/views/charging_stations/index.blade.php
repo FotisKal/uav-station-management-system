@@ -36,11 +36,11 @@
                         <tr>
                             <th> {{ __('Name') }} </th>
                             <th> {{ __('Position Type') }} </th>
-                            @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS))
-                                <th colspan="2" class=""> {{ __('Actions') }} </th>
-                            @endif
                             @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
                                 <th> {{ __('Company\'s Name') }} </th>
+                            @endif
+                            @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_STATIONS))
+                                <th colspan="2" class=""> {{ __('Actions') }} </th>
                             @endif
                         </tr>
                         </thead>
