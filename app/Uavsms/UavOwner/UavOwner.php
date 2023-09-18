@@ -98,7 +98,7 @@ class UavOwner extends Model
 
         if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
             $uavs_owners_join = Uav::join('uav_owners', 'uavs.owner_id', '=', 'uav_owners.id')
-                ->select('uav_owners.email as uav_owner_email')
+                ->select('uav_owners.id as owner_id', 'uav_owners.email as owner_email')
                 ->distinct()
                 ->get();
 
