@@ -112,10 +112,17 @@ class UavOwnerController extends Controller
             return back();
         }
 
-        $uavs = Uav::where('owner_id', $owner->id)
-            ->where('company_id', $user->company_id)
-            ->orderBy('id')
-            ->paginate(PerPage::get());
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $uavs = Uav::where('owner_id', $owner->id)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+        } else if ($user->role_id == UserRole::SIMPLE_USER_ID) {
+            $uavs = Uav::where('owner_id', $owner->id)
+                ->where('company_id', $user->company_id)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+        }
 
         if (count($uavs) <= 0) {
             return back();
@@ -147,10 +154,17 @@ class UavOwnerController extends Controller
             return back();
         }
 
-        $uavs = Uav::where('owner_id', $owner->id)
-            ->where('company_id', $user->company_id)
-            ->orderBy('id')
-            ->paginate(PerPage::get());
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $uavs = Uav::where('owner_id', $owner->id)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+
+        } else if ($user->role_id == UserRole::SIMPLE_USER_ID) {
+            $uavs = Uav::where('owner_id', $owner->id)
+                ->where('company_id', $user->company_id)
+                ->orderBy('id')
+                ->paginate(PerPage::get());
+        }
 
         if (count($uavs) <= 0) {
             return back();
