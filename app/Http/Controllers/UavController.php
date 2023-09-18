@@ -112,8 +112,10 @@ class UavController extends Controller
             return back();
         }
 
-        if ($uav->company != $user->company) {
-            return back();
+        if ($user->role_id != UserRole::ADMINISTRATOR_ID) {
+            if ($uav->company != $user->company) {
+                return back();
+            }
         }
 
         $tz = 'Europe/Athens';
@@ -159,8 +161,10 @@ class UavController extends Controller
             return back();
         }
 
-        if ($uav->company != $user->company) {
-            return back();
+        if ($user->role_id != UserRole::ADMINISTRATOR_ID) {
+            if ($uav->company != $user->company) {
+                return back();
+            }
         }
 
         $emails = UavOwner::emailsToList(false);

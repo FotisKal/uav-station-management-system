@@ -110,8 +110,10 @@ class ChargingSessionController extends Controller
             ->where('charging_sessions.id', $id)
             ->first();
 
-        if ($session->company_id != $user->company_id) {
-            return back();
+        if ($user->role_id != UserRole::ADMINISTRATOR_ID) {
+            if ($session->company_id != $user->company_id) {
+                return back();
+            }
         }
 
         if ($session == null) {
