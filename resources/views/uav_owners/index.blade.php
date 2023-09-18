@@ -56,7 +56,7 @@
                                 <td>{{ $owner->msisdn }}</td>
                                 @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
                                     <td>
-                                        <a href="{{ url('/companies/' . $owner->company_id . '/view') }}"> {{ $owner->company_name }} </a>
+                                        <a href="{{ url('/charging-companies/' . $owner->company_id . '/view') }}"> {{ $owner->company_name }} </a>
                                     </td>
                                 @endif
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAV_OWNERS))
