@@ -445,7 +445,7 @@ class UavController extends Controller
         if (count($sessions) > 0) {
             $alerts[] = [
                 'message' => __('This UAV cannot be deleted, because it\'s in a Charging Session, right now.'),
-                'class' => __('alert bg-warning'),
+                'class' => __('alert bg-danger'),
             ];
 
             return redirect('/uavs')->with([
