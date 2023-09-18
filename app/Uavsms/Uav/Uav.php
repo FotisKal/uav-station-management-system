@@ -3,12 +3,13 @@
 namespace App\Uavsms\Uav;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Validation\Rule;
-use App\UserRole;
 use Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Uav extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'owner_user_id',
         'name',
