@@ -139,12 +139,20 @@ class User extends Authenticatable
                 'in:' . implode(',', DatetimeFormat::$formats),
             ],
             'password' => [
-                Rule::requiredIf($action == 'create'),
+                Rule::requiredIf($action == 'create' || $action == 'company_admin_create'),
                 'confirmed',
                 'min:8',
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
             ],
         ];
+
+        if ($action == 'company_admin_create') {
+            $rules['company_id'] = [
+                'required',
+                'integer',
+                'exists:charging_companies,id',
+            ];
+        }
 
         $messages = [
             'email' => __('Invalid e-mail address.'),
@@ -168,6 +176,10 @@ class User extends Authenticatable
             'password.min' => __('The Password must be longer than 7 characters.'),
             'password.regex' => __('The Password must contain characters from at least three of the following five
             categories: (A – Z), (a – z), (0 – 9), Non-alphanumeric, Unicode characters'),
+
+            'company_id.required' => __('The Company can\'t be empty'),
+            'company_id.integer' => __('The Company Id must be a number'),
+            'company_id.exists' => __('The Company must be an existing one'),
         ];
 
         return Validator::make($request->all(), $rules, $messages);

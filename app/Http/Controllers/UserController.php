@@ -125,6 +125,14 @@ class UserController extends Controller
         }
 
         $user = new User();
+        $user_auth = Auth::user();
+
+        if ($user_auth->role_id == UserRole::ADMINISTRATOR_ID) {
+            $names = ChargingCompany::namesToList(true);
+
+        } else {
+            $names = null;
+        }
 
         return view('users.' . $view_dir . '.create', [
             'page_title' => MainMenu::$menu_items[MainMenu::USERS]['sub_items'][$key]['title'],
@@ -137,6 +145,8 @@ class UserController extends Controller
             'user' => $user,
             'date_formats' => DateFormat::toList(),
             'datetime_formats' => DatetimeFormat::toList(),
+            'names' => $names,
+            'action' => 'create'
         ]);
     }
 
@@ -248,7 +258,14 @@ class UserController extends Controller
         }
 
         $user = new User();
-        $validator = $user->validation($request, 'create');
+        $user_auth = Auth::user();
+
+        if ($type == $url_parts[UserRole::ADMINISTRATOR]) {
+            $validator = $user->validation($request, 'create');
+
+        } elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
+            $validator = $user->validation($request, 'company_admin_create');
+        }
 
         if ($validator->fails()) {
             $alerts[] = [
@@ -265,8 +282,17 @@ class UserController extends Controller
 
         if ($type == $url_parts[UserRole::ADMINISTRATOR]) {
             $user->role_id = UserRole::ADMINISTRATOR_ID;
+            $user->company_id = 0;
+
         } elseif ($type == $url_parts[UserRole::SIMPLE_USER]) {
             $user->role_id = UserRole::SIMPLE_USER_ID;
+
+            if ($user_auth->role_id == UserRole::ADMINISTRATOR_ID) {
+                $user->company_id = $request->input('company_id');
+
+            } else if ($user_auth->role_id == UserRole::SIMPLE_USER_ID) {
+                $user->company_id = $user_auth->company_id;
+            }
         }
 
         $user->name = $request->input('full_name');
