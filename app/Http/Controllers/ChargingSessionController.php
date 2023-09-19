@@ -187,7 +187,19 @@ class ChargingSessionController extends Controller
      */
     public function apiStore(Request $request)
     {
-        $charging_station = $request->user();
+        $charging_station_generic = $request->user();
+
+        $charging_station = ChargingStation::find($charging_station_generic->id);
+
+        if ($charging_station == null) {
+            $response = [
+                'charging_session_created' => false,
+                'message' => __('Charging Station with id: ' . $charging_station_generic->id . ' has been deleted.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
         $uav_id = $request->json('uav_id');
 
         $session = new ChargingSession();
