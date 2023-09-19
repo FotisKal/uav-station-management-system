@@ -278,4 +278,44 @@ class ChargingSessionController extends Controller
 
         return response()->json($response, 201);
     }
+
+    /**
+     * API Stop an ongoing Session
+     */
+    public function apiStop(Request $request)
+    {
+        $charging_station_generic = $request->user();
+
+        $charging_station = ChargingStation::find($charging_station_generic->id);
+
+        $session = ChargingSession::where('charging_station_id', $charging_station->id)
+            ->whereNull('date_time_end')
+            ->first();
+
+        if ($session == null) {
+            $response = [
+                'charging_session_stopped' => false,
+                'message' => __('Charging Station with id: ' . $charging_station->id . ' is not in a Charging Session right now.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
+        $tz = 'Europe/Athens';
+        $timestamp = time();
+        $datetime_now = new DateTime("now", new DateTimeZone($tz));
+        $datetime_now->setTimestamp($timestamp);
+        $datetime_now_str = $datetime_now->format('Y-m-d H:i:s');
+
+        $session->date_time_end = $datetime_now_str;
+
+        $session->save();
+
+        $response = [
+            'charging_session_stopped' => true,
+            'message' => __('Charging Station with id: ' . $charging_station->id . ' stopped its Charging Session right now.'),
+        ];
+
+        return response()->json($response, 200);
+    }
 }
