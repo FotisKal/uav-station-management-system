@@ -278,7 +278,7 @@ class ChargingStationController extends Controller
         if ($charging_station == null) {
             $response = [
                 'charging_station_updated' => false,
-                'message' => __('Charging Station with id: ' . $charging_station_generic->id . ' not found.'),
+                'message' => __('Charging Station with id: ' . $charging_station_generic->id . ' has been deleted.'),
             ];
 
             return response()->json($response, 200);
@@ -305,6 +305,21 @@ class ChargingStationController extends Controller
 
         if ($station == null) {
             return back();
+        }
+
+        $sessions = ChargingSession::where('charging_station_id', $station->id)
+            ->whereNull('date_time_end')
+            ->get();
+
+        if (count($sessions) > 0) {
+            $alerts[] = [
+                'message' => __('This Charging Station cannot be deleted, because it\'s in a Charging Session, right now.'),
+                'class' => __('alert bg-danger'),
+            ];
+
+            return redirect('/charging-stations')->with([
+                'alerts' => $alerts,
+            ]);
         }
 
         $station->delete();
