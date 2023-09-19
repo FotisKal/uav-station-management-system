@@ -17,19 +17,33 @@
                                 <tr>
                                     @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
                                         <th class="text-left"> {{ __('Charging Company') }} </th>
-                                        <td>
-                                            <a href="{{ url('/charging-companies/' . $session->station->company->id . '/view') }}">
-                                                {{ $session->station->company->name }}
-                                            </a>
-                                        </td>
+                                        @if ($session->station == null &&
+                                            count($station_trashed_collection = $session->station()->withTrashed()->get()) > 0)
+                                            <td>
+                                                <a href="{{ url('/charging-companies/' . $station_trashed_collection->first()->company->id . '/view') }}">
+                                                    {{ $station_trashed_collection->first()->company->name }}
+                                                </a>
+                                            </td>
+                                        @else
+                                            <td>
+                                                <a href="{{ url('/charging-companies/' . $session->station->company->id . '/view') }}">
+                                                    {{ $session->station->company->name }}
+                                                </a>
+                                            </td>
+                                        @endif
                                     @endif
                                 </tr>
                                 <tr>
                                     <th class="text-left"> {{ __('Station\'s Name') }} </th>
                                     <td>
-                                        <a href="{{ url('/charging-stations/' . $session->id . '/view') }}">
-                                            {{ $session->station->name }}
-                                        </a>
+                                        @if ($session->station == null &&
+                                            count($station_trashed_collection = $session->station()->withTrashed()->get()) > 0)
+                                            {{ __('Deleted Station') }}
+                                        @else
+                                            <a href="{{ url('/charging-stations/' . $session->station->id . '/view') }}">
+                                                {{ $session->station->name }}
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>

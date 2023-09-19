@@ -20,6 +20,7 @@ class CreateChargingStations extends Migration
             $table->string('position_type');
             $table->text('position_json')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

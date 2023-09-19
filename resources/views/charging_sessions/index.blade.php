@@ -52,7 +52,12 @@
                                     <a href="{{ url('/charging-sessions/' . $session->id . '/view') }}"> {{ $session->id }} </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url('/charging-stations/' . $session->charging_stations_id . '/view') }}"> {{ $session->charging_stations_name }} </a>
+                                    @if ($session->station == null &&
+                                            count($station_trashed_collection = $session->station()->withTrashed()->get()) > 0)
+                                        {{ __('Deleted Station') }}
+                                    @else
+                                        <a href="{{ url('/charging-stations/' . $session->charging_stations_id . '/view') }}"> {{ $session->charging_stations_name }} </a>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ $session->date_time_start ?? '-' }}
