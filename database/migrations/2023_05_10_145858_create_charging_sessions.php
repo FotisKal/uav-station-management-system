@@ -23,6 +23,7 @@ class CreateChargingSessions extends Migration
             $table->float('kw_spent', 6);
             $table->string('charging_session_cost_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
