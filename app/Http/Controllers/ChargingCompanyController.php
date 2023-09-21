@@ -402,7 +402,7 @@ class ChargingCompanyController extends Controller
 
         $stations_sessions_join = ChargingStation::join('charging_sessions', 'charging_stations.id', '=', 'charging_sessions.id')
             ->where('company_id', $company->id)
-            ->whereYear('created_at', $year)
+            ->whereYear('charging_sessions.created_at', $year)
 //            ->select('charging_sessions.id as charging_session_id')
             ->get();
 
