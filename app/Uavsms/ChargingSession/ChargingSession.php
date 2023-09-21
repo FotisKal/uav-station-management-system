@@ -6,9 +6,12 @@ use App\Uavsms\ChargingStation\ChargingStation;
 use App\Uavsms\Uav\Uav;
 use Illuminate\Database\Eloquent\Model;
 use Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChargingSession extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
