@@ -4,9 +4,12 @@ namespace App\Uavsms\ChargingCompany;
 
 use Illuminate\Database\Eloquent\Model;
 use Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChargingCompany extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
     ];
