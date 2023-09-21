@@ -206,7 +206,28 @@ class ChargingCompanyController extends Controller
             return back();
         }
 
-        $company->delete();
+        $tz = 'Europe/Athens';
+        $timestamp = time();
+        $datetime_now = new DateTime("now", new DateTimeZone($tz));
+        $datetime_now->setTimestamp($timestamp);
+        $datetime_now_str = $datetime_now->format('Y-m-d H:i:s');
+
+        ChargingStation::join('charging_sessions', 'charging_stations.id', '=', 'charging_sessions.charging_station_id')
+//            ->join('charging_session_costs', 'charging_sessions.charging_session_cost_id ', '=', 'charging_session_costs.id')
+            ->join('charging_companies', 'charging_stations.company_id', '=', 'charging_companies.id')
+            ->join('uavs', 'charging_stations.company_id', '=', 'uavs.company_id')
+            ->join('users', 'charging_stations.company_id', '=', 'users.company_id')
+//            ->select('charging_stations.deleted_at', 'charging_sessions.deleted_at, charging_session_costs.deleted_at, uavs.deleted_at')
+            ->select('charging_stations.deleted_at', 'charging_sessions.deleted_at, uavs.deleted_at, users.deleted_at')
+            ->where('charging_stations.company_id', $company->id)
+            ->update([
+                    'charging_stations.deleted_at' => $datetime_now_str,
+                    'charging_sessions.deleted_at' => $datetime_now_str,
+                    'charging_companies.deleted_at' => $datetime_now_str,
+                    'uavs.deleted_at' => $datetime_now_str,
+                    'users.deleted_at' => $datetime_now_str,
+//                    'charging_session_costs.deleted_at' => $datetime_now_str,
+                ]);
 
         $alerts[] = [
             'message' => __('Charging Company successfully deleted.'),
