@@ -88,7 +88,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
-                '/charging-companies/' . $id . '/view' => 'View',
+                '/charging-companies/' . $id . '/view' => $company->name,
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
             'selected_nav' => 'view',
@@ -112,6 +112,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
+                '/charging-companies/' . $id . '/view' => $company->name,
                 '/charging-companies/' . $id . '/edit' => 'Edit',
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
@@ -328,6 +329,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
+                '/charging-companies/' . $company->id . '/view' => $company->name,
                 '/charging-companies/' . $company->id . '/analytics' => __('Analytics'),
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
@@ -376,6 +378,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
+                '/charging-companies/' . $company->id . '/view' => $company->name,
                 '/charging-companies/' . $company->id . '/analytics' => __('Analytics'),
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
@@ -440,6 +443,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
+                '/charging-companies/' . $company->id . '/view' => $company->name,
                 '/charging-companies/' . $company->id . '/analytics' => __('Analytics'),
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
@@ -512,6 +516,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
+                '/charging-companies/' . $company->id . '/view' => $company->name,
                 '/charging-companies/' . $company->id . '/analytics' => __('Analytics'),
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
@@ -582,6 +587,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
+                '/charging-companies/' . $company->id . '/view' => $company->name,
                 '/charging-companies/' . $company->id . '/analytics' => __('Analytics'),
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
@@ -653,6 +659,7 @@ class ChargingCompanyController extends Controller
             'breadcrumbs' => [
                 '/dashboard' => MainMenu::$menu_items[MainMenu::DASHBOARD]['title'],
                 '/charging-companies' => MainMenu::$menu_items[MainMenu::CHARGING_COMPANIES]['title'],
+                '/charging-companies/' . $company->id . '/view' => $company->name,
                 '/charging-companies/' . $company->id . '/analytics' => __('Analytics'),
             ],
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
