@@ -235,7 +235,7 @@ class ChargingSessionController extends Controller
         }
 
         $charging_sessions = ChargingSession::where('charging_station_id', $charging_station->id)
-            ->where('uav_id', $uav_id)
+            ->orWhere('uav_id', $uav_id)
             ->where('date_time_end', null)
             ->get();
 
