@@ -17,6 +17,7 @@ class CreateChargingSessionCosts extends Migration
             $table->increments('id');
             $table->float('credits', 6);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
