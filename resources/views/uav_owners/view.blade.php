@@ -33,6 +33,9 @@
                             <tbody>
                             <tr>
                                 <th class="text-left"> {{ __('Owned UAVs Names') }} </th>
+                                @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                    <th> {{ __('Company\'s Name') }} </th>
+                                @endif
                             </tr>
 
                             @foreach($uavs as $uav)
@@ -42,6 +45,11 @@
                                             {{ $uav->name }}
                                         </a>
                                     </td>
+                                    @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                        <td>
+                                            <a href="{{ url('/charging-companies/' . $uav->company_id . '/view') }}"> {{ $uav->company_name }} </a>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
 
