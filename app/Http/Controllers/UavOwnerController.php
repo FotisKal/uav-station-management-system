@@ -26,10 +26,9 @@ class UavOwnerController extends Controller
 
         if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
             $owners = Uav::join('uav_owners', 'uavs.owner_id', '=', 'uav_owners.id')
-                ->join('charging_companies', 'uavs.company_id', '=', 'charging_companies.id')
-                ->select('uav_owners.*', 'uavs.company_id', 'charging_companies.name as company_name')
+                ->select('uav_owners.*')
                 ->joinedOwnerFilter($search)
-                ->distinct()
+                ->distinct('uav_owners.id')
                 ->orderBy('uav_owners.id')
                 ->paginate(PerPage::get());
 
