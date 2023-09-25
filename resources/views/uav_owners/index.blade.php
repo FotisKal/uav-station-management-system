@@ -37,9 +37,6 @@
                             <th> {{ __('Email') }} </th>
                             <th> {{ __('Full Name') }} </th>
                             <th> {{ __('Mobile Phone') }} </th>
-                            @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
-                                <th> {{ __('Company\'s Name') }} </th>
-                            @endif
                             @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAV_OWNERS))
                                 <th colspan="2" class=""> {{ __('Actions') }} </th>
                             @endif
@@ -54,11 +51,6 @@
                                 </td>
                                 <td>{{ $owner->name }}</td>
                                 <td>{{ $owner->msisdn }}</td>
-                                @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
-                                    <td>
-                                        <a href="{{ url('/charging-companies/' . $owner->company_id . '/view') }}"> {{ $owner->company_name }} </a>
-                                    </td>
-                                @endif
                                 @if (Auth::user()->hasPermission(\App\Uavsms\UserRole\Permission::CAN_MANAGE_UAV_OWNERS))
                                     <td>
                                         <button class="btn btn-secondary margin" type="button"
