@@ -15,10 +15,12 @@
                                 <th class="text-left"> {{ __('Name') }} </th>
                                 <td> {{ $station->name }} </td>
                             </tr>
-                            <tr>
-                                <th class="text-left"> {{ __('Company\'s Name') }} </th>
-                                <td> {{ $station->company->name }} </td>
-                            </tr>
+                            @if(\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                <tr>
+                                    <th class="text-left"> {{ __('Company\'s Name') }} </th>
+                                    <td> {{ $station->company->name }} </td>
+                                </tr>
+                            @endif
                             <tr>
                                 <th class="text-left"> {{ __('Position Type') }} </th>
                                 <td> {{ \App\Uavsms\ChargingStation\PositionType::$permissions_config[$station->position_type] }} </td>
