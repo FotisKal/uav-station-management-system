@@ -23,6 +23,10 @@
                             <th class="text-left"> {{ __('Mobile Phone') }} </th>
                             <td> {{ $owner->msisdn }} </td>
                         </tr>
+                        <tr>
+                            <th class="text-left"> {{ __('Credits') }} </th>
+                            <td> {{ $owner->credits }} </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
