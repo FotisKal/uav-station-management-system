@@ -12,17 +12,13 @@ class ChargingSessionCostsTableSeeder extends Seeder
      */
     public function run()
     {
-        $data = [
-            [
+        $data = [];
+
+        for ($i = 0; $i < 204; $i++) {
+            $data[] = [
                 'credits' => 10.0,
-            ],
-            [
-                'credits' => 6.6,
-            ],
-            [
-                'credits' => 9.3,
-            ],
-        ];
+            ];
+        }
 
         foreach ($data as $v) {
             $cost = new ChargingSessionCost();

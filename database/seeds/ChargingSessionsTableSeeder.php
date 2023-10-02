@@ -12,35 +12,60 @@ class ChargingSessionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $data = [
-            [
-                'charging_station_id' => 1,
-                'uav_id' => 1,
-                'date_time_start' => '2023-05-11 17:42:59',
-                'date_time_end' => null,
-                'estimated_date_time_end' => '2023-05-11 18:42:59',
-                'kw_spent' => 0.10,
-                'charging_session_cost_id' => 1,
-            ],
-            [
-                'charging_station_id' => 2,
-                'uav_id' => 2,
-                'date_time_start' => '2023-05-11 17:28:59',
-                'date_time_end' => null,
-                'estimated_date_time_end' => '2023-05-11 18:28:59',
-                'kw_spent' => 0.16,
-                'charging_session_cost_id' => 2,
-            ],
-            [
-                'charging_station_id' => 3,
-                'uav_id' => 3,
-                'date_time_start' => '2023-05-11 15:10:59',
-                'date_time_end' => '2023-05-11 16:06:24',
-                'estimated_date_time_end' => '2023-05-11 16:10:59',
-                'kw_spent' => 0.20,
-                'charging_session_cost_id' => 3,
-            ],
-        ];
+        $station_ids = [];
+        $uav_ids = [];
+        $data = [];
+
+
+        for ($i = 1; $i < 13; $i++) {
+            $station_ids[] = $i;
+        }
+
+        for ($i = 1; $i < 18; $i++) {
+            $uav_ids[] = $i;
+        }
+
+        $hour_number = 11;
+        $cost_id = 1;
+
+        foreach ($station_ids as $station_id) {
+            $counter = 0;
+            $day_number = 1;
+            $month_number = 1;
+
+            foreach ($uav_ids as $uav_id) {
+                if ($counter != 0) {
+                    if ($counter % 2 == 0) {
+                        $day_number++;
+                        $month_number++;
+                        $hour_number = 11;
+                    }
+                }
+
+                $rand_minutes_start = rand(0, 59);
+                $rand_seconds_start = rand(0, 59);
+
+                $rand_minutes_end = rand(0, 59);
+                $rand_seconds_end = rand(0, 59);
+
+                $datetime_start = '2023-0' . $month_number . '-0' . $day_number . ' ' . $hour_number . ':' . $rand_minutes_start . ':' .  $rand_seconds_start;
+                $datetime_end = '2023-0' . $month_number . '-0' . $day_number . ' ' . ++$hour_number . ':' . $rand_minutes_end . ':' . $rand_seconds_end;
+
+                $data[] = [
+                    'charging_station_id' => $station_id,
+                    'uav_id' => $uav_id,
+                    'date_time_start' => $datetime_start,
+                    'date_time_end' => $datetime_end,
+                    'estimated_date_time_end' => null,
+                    'kw_spent' => 0.10,
+                    'charging_session_cost_id' => $cost_id,
+                ];
+
+                $hour_number++;
+                $counter++;
+                $cost_id++;
+            }
+        }
 
         foreach ($data as $v) {
             $session = new ChargingSession();

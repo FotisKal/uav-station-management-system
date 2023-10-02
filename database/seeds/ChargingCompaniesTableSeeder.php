@@ -16,13 +16,10 @@ class ChargingCompaniesTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Company 1',
+                'name' => 'Fast Charging',
             ],
             [
-                'name' => 'Company 2',
-            ],
-            [
-                'name' => 'Company 3',
+                'name' => 'Electronic Stations',
             ],
         ];
 
