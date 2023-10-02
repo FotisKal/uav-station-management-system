@@ -31,6 +31,15 @@
             {!! errors_form($errors, 'name', '') !!}
         </div>
     </div>
+    @if ($user->role_id == \App\UserRole::ADMINISTRATOR_ID)
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label"><span class="required">*</span> {{ __('Uav Belongs to') }}: </label>
+            <div class="col-md-9">
+                {!! selectbox('company_id', 'company_id', $names, ($action == 'edit' ? $station->company->id : 0)) !!}
+                {!! errors_form($errors, 'company_id', 'd-block ' . ($action == 'edit' ? 'text-left' : '')) !!}
+            </div>
+        </div>
+    @endif
 @endif
 <br>
 <div class="form-group row offset-3">

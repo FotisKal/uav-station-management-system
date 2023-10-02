@@ -85,6 +85,13 @@ class UavOwnerController extends Controller
     {
         $owner = new UavOwner();
         $uav = new Uav();
+        $user = Auth::user();
+
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $names = ChargingCompany::namesToList(true);
+        } else {
+            $names = null;
+        }
 
         return view('uav_owners.create', [
             'page_title' => MainMenu::$menu_items[MainMenu::UAV_OWNERS]['title'],
@@ -96,6 +103,8 @@ class UavOwnerController extends Controller
             'selected_menu' => MainMenu::UAV_OWNERS,
             'owner' => $owner,
             'uav' => $uav,
+            'names' => $names,
+            'user' => $user,
         ]);
     }
 
@@ -192,7 +201,13 @@ class UavOwnerController extends Controller
     {
         $user = Auth::user();
         $owner = new UavOwner();
-        $validator = $owner->validation($request, 'create');
+
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $validator = $owner->validation($request, 'admin_create');
+        } else {
+
+            $validator = $owner->validation($request, 'create');
+        }
 
         if ($validator->fails()) {
             $alerts[] = [
@@ -231,7 +246,14 @@ class UavOwnerController extends Controller
 
         $uav->name = $request->input('name');
         $uav->owner_id = $owner->id;
-        $uav->company_id = $user->company_id;
+
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $uav->company_id = $request->input('company_id');
+
+        } else {
+            $uav->company_id = $user->company_id;
+        }
+
         $uav->charging_percentage = null;
         $uav->position_json = null;
 

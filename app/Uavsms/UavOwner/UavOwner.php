@@ -64,16 +64,28 @@ class UavOwner extends Model
                 'email',
                 'max:320',
             ],
+            'full_name' => [
+                'required',
+                'max:50',
+            ],
             'mobile_phone' => [
                 'required',
                 'integer',
             ],
         ];
 
+        if ($action == 'admin_create') {
+            $rules['company_id'] = [
+                'required',
+                'integer',
+                'exists:charging_companies,id',
+            ];
+        }
+
         $messages = [
-            'name' => __('Invalid name'),
-            'name.required' => __('The name can\'t be empty'),
-            'name.max' => __('The name can\'t be longer than 50 characters'),
+            'full_name' => __('Invalid name'),
+            'full_name.required' => __('The name can\'t be empty'),
+            'full_name.max' => __('The name can\'t be longer than 50 characters'),
 
             'email' => __('Invalid email'),
             'email.required' => __('The email can\'t be empty'),
@@ -83,6 +95,10 @@ class UavOwner extends Model
             'mobile_phone' => __('Invalid Mobile Phone Number'),
             'mobile_phone.required' => __('The Mobile Phone Number can\'t be empty'),
             'mobile_phone.integer' => __('The Mobile Phone Number has to be a number'),
+
+            'company_id.required' => __('The Company can\'t be empty'),
+            'company_id.integer' => __('The Company Id must be a number'),
+            'company_id.exists' => __('The Company must be an existing one'),
         ];
 
         return Validator::make($request->all(), $rules, $messages);
