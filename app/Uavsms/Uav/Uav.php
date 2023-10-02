@@ -121,6 +121,14 @@ class Uav extends Model
             ];
         }
 
+        if ($action == 'admin_create') {
+            $rules['company_id'] = [
+                'required',
+                'integer',
+                'exists:charging_companies,id',
+            ];
+        }
+
         $messages = [
             'name' => __('Invalid name'),
             'name.required' => __('The name can\'t be empty'),
@@ -129,6 +137,10 @@ class Uav extends Model
             'user_id.required' => __('The UAV Owner can\'t be empty'),
             'user_id.integer' => __('The UAV Owner Id must be a number'),
             'user_id.exists' => __('The UAV Owner must be an existing one'),
+
+            'company_id.required' => __('The Company can\'t be empty'),
+            'company_id.integer' => __('The Company Id must be a number'),
+            'company_id.exists' => __('The Company must be an existing one'),
         ];
 
         return Validator::make($request->all(), $rules, $messages);

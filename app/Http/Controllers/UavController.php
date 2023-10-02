@@ -9,7 +9,6 @@ use App\Uavsms\ChargingCompany\ChargingCompany;
 use App\Uavsms\ChargingSession\ChargingSession;
 use App\Uavsms\Uav\Uav;
 use App\Uavsms\UavOwner\UavOwner;
-use App\User;
 use App\UserRole;
 use DateTime;
 use DateTimeZone;
@@ -84,6 +83,13 @@ class UavController extends Controller
     public function create()
     {
         $uav = new Uav();
+        $user = Auth::user();
+
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $names = ChargingCompany::namesToList(true);
+        } else {
+            $names = null;
+        }
 
         $emails = UavOwner::emailsToList(true);
 
@@ -97,6 +103,9 @@ class UavController extends Controller
             'selected_menu' => MainMenu::UAVS,
             'uav' => $uav,
             'emails' => $emails,
+            'user' => $user,
+            'names' => $names,
+            'action' => 'create',
         ]);
     }
 
@@ -266,7 +275,13 @@ class UavController extends Controller
     {
         $user = Auth::user();
         $uav = new Uav();
-        $validator = $uav->validation($request, 'create');
+
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $validator = $uav->validation($request, 'admin_create');
+        } else {
+
+            $validator = $uav->validation($request, 'create');
+        }
 
         if ($validator->fails()) {
             $alerts[] = [
@@ -283,7 +298,13 @@ class UavController extends Controller
 
         $uav->name = $request->input('name');
         $uav->owner_id = $request->input('user_id');
-        $uav->company_id = $user->company_id;
+
+        if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
+            $uav->company_id = $request->input('company_id');
+
+        } else {
+            $uav->company_id = $user->company_id;
+        }
 
         $uav->save();
 
