@@ -250,6 +250,17 @@ class ChargingSessionController extends Controller
             return response()->json($response, 200);
         }
 
+        $owner = $uav->uavOwner;
+
+        if ($owner->credits < 10) {
+            $response = [
+                'charging_session_created' => false,
+                'message' => __('Owner of UAV with id: ' . $uav_id . ' has not enough Credits for this Charging Session.'),
+            ];
+
+            return response()->json($response, 200);
+        }
+
         $tz = 'Europe/Athens';
         $timestamp = time();
         $datetime_now = new DateTime("now", new DateTimeZone($tz));
@@ -265,13 +276,17 @@ class ChargingSessionController extends Controller
 
         $cost = new ChargingSessionCost();
 
-        $cost->credits = 0;
+        $cost->credits = 10;
 
         $cost->save();
 
         $session->charging_session_cost_id = $cost->id;
 
         $session->save();
+
+        $owner->credits -= $cost->credits;
+
+        $owner->save();
 
         $response = [
             'charging_session_created' => true,
@@ -310,6 +325,7 @@ class ChargingSessionController extends Controller
         $datetime_now_str = $datetime_now->format('Y-m-d H:i:s');
 
         $session->date_time_end = $datetime_now_str;
+        $session->kw_spent = 0.1;
 
         $session->save();
 
