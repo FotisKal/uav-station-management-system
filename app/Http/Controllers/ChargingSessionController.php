@@ -234,8 +234,10 @@ class ChargingSessionController extends Controller
             return response()->json($response, 200);
         }
 
-        $charging_sessions = ChargingSession::where('charging_station_id', $charging_station->id)
-            ->orWhere('uav_id', $uav_id)
+        $charging_sessions = ChargingSession::where(function($query) use ($charging_station, $uav_id) {
+            $query->where('charging_station_id', $charging_station->id)
+                ->orWhere('uav_id', $uav_id);
+            })
             ->where('date_time_end', null)
             ->get();
 
