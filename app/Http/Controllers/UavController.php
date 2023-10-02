@@ -153,6 +153,7 @@ class UavController extends Controller
             ],
             'selected_menu' => MainMenu::UAVS,
             'selected_nav' => 'view',
+            'user' => $user,
             'uav' => $uav,
             'sessions' => $sessions,
         ]);

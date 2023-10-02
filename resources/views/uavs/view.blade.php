@@ -66,6 +66,14 @@
                                     {{ $uav->charging_percentage . '%' }}
                                 </td>
                             </tr>
+                            @if ($user->role_id == \App\UserRole::ADMINISTRATOR_ID)
+                                <tr>
+                                    <th class="text-left"> {{ __('Charging Company\'s Name') }} </th>
+                                    <td>
+                                        <a href="{{ url('/charging-companies/' . $uav->company->id . '/view') }}"> {{ $uav->company->name }} </a>
+                                    </td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
