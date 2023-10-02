@@ -24,6 +24,14 @@
 </div>
 @if($action == 'create')
     <div class="form-group row">
+        <label class="col-md-3 col-form-label"><span class="required">*</span> {{ __('Credits') }}: </label>
+        <div class="col-md-9">
+            <input type="number" name="credits" id="credits" class="form-control
+            {{ $errors->has('credits') ? 'is-invalid' : '' }}" value="">
+            {!! errors_form($errors, 'credits', '') !!}
+        </div>
+    </div>
+    <div class="form-group row">
         <label class="col-md-3 col-form-label"><span class="required">*</span> {{ __('Uav Name') }}: </label>
         <div class="col-md-9">
             <input type="text" name="name" id="name" class="form-control

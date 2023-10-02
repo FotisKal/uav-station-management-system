@@ -72,6 +72,11 @@ class UavOwner extends Model
                 'required',
                 'integer',
             ],
+            'credits' => [
+                'required',
+                'integer',
+                'min:0',
+            ],
         ];
 
         if ($action == 'admin_create') {
@@ -95,6 +100,10 @@ class UavOwner extends Model
             'mobile_phone' => __('Invalid Mobile Phone Number'),
             'mobile_phone.required' => __('The Mobile Phone Number can\'t be empty'),
             'mobile_phone.integer' => __('The Mobile Phone Number has to be a number'),
+
+            'credits.required' => __('The Credits can\'t be empty'),
+            'credits.integer' => __('The Credits has to be a number'),
+            'credits.min' => __('The Credits has to be equal or greater to 0'),
 
             'company_id.required' => __('The Company can\'t be empty'),
             'company_id.integer' => __('The Company Id must be a number'),

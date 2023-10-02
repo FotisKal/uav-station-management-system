@@ -225,6 +225,7 @@ class UavOwnerController extends Controller
         $owner->name = $request->input('full_name');
         $owner->email = $request->input('email');
         $owner->msisdn = $request->input('mobile_phone');
+        $owner->credits = $request->input('credits');
 
         $owner->save();
 

@@ -18,6 +18,7 @@ class CreateUavOwnersTable extends Migration
             $table->string('name')->index();
             $table->string('email', 150)->index();
             $table->bigInteger('msisdn')->index();
+            $table->float('credits');
             $table->timestamps();
         });
     }
