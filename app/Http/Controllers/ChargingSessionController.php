@@ -32,19 +32,24 @@ class ChargingSessionController extends Controller
 
         if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
             $sessions = ChargingSession::join('charging_stations', 'charging_sessions.charging_station_id', '=', 'charging_stations.id')
-                ->select('charging_sessions.*', 'charging_stations.name as charging_stations_name', 'charging_stations.id as charging_stations_id')
+                ->join('charging_companies', 'charging_stations.company_id' , '=', 'charging_companies.id')
+                ->select('charging_sessions.*', 'charging_companies.id as charging_companies_id',
+                    'charging_companies.name as charging_companies_name',
+                    'charging_companies.deleted_at as charging_companies_deleted_at')
                 ->filter($search)
-                ->orderBy('id')
+                ->orderByRaw('-date_time_end', 'desc')
                 ->paginate(PerPage::get());
 
             $companies_names = ChargingCompany::namesToList(true);
 
         } else if ($user->role_id == UserRole::SIMPLE_USER_ID) {
             $sessions = ChargingSession::join('charging_stations', 'charging_sessions.charging_station_id', '=', 'charging_stations.id')
-                ->select('charging_sessions.*', 'charging_stations.name as charging_stations_name', 'charging_stations.id as charging_stations_id')
+                ->select('charging_sessions.*', 'charging_stations.id as charging_stations_id',
+                    'charging_stations.name as charging_stations_name',
+                    'charging_stations.deleted_at as charging_stations_deleted_at')
                 ->where('company_id', $user->company_id)
                 ->filter($search)
-                ->orderBy('id')
+                ->orderByRaw('-date_time_end', 'desc')
                 ->paginate(PerPage::get());
 
             $companies_names = null;
