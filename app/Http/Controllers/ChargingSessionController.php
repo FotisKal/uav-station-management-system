@@ -111,12 +111,28 @@ class ChargingSessionController extends Controller
     public function view($id)
     {
         $user = Auth::user();
+
         $session = ChargingSession::join('charging_stations', 'charging_sessions.charging_station_id', '=', 'charging_stations.id')
+            ->join('uavs', 'charging_sessions.uav_id' , '=', 'uavs.id')
+            ->join('uav_owners', 'uavs.owner_id', '=', 'uav_owners.id')
+            ->join('charging_companies', 'charging_stations.company_id' , '=', 'charging_companies.id')
+            ->join('charging_session_costs', 'charging_sessions.charging_session_cost_id' , '=', 'charging_session_costs.id')
+            ->select('charging_sessions.id', 'charging_sessions.date_time_start', 'charging_sessions.date_time_end',
+                'charging_sessions.estimated_date_time_end', 'charging_sessions.kw_spent',
+                'charging_companies.id as charging_companies_id', 'charging_companies.name as charging_companies_name',
+                'charging_companies.deleted_at as charging_companies_deleted_at',
+                'charging_stations.id as charging_stations_id' ,'charging_stations.name as charging_stations_name',
+                'charging_stations.deleted_at as charging_stations_deleted_at',
+                'uavs.id as uavs_id' ,'uavs.name as uavs_name', 'uavs.charging_percentage as uavs_charging_percentage',
+                'uavs.deleted_at as uavs_deleted_at',
+                'uav_owners.id as uav_owners_id' ,'uav_owners.email as uav_owners_email',
+                'uav_owners.deleted_at as uav_owners_deleted_at',
+                'charging_session_costs.credits as credits')
             ->where('charging_sessions.id', $id)
             ->first();
 
         if ($user->role_id != UserRole::ADMINISTRATOR_ID) {
-            if ($session->company_id != $user->company_id) {
+            if ($session->charging_companies_id != $user->company_id) {
                 return back();
             }
         }

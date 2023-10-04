@@ -17,18 +17,16 @@
                                 <tr>
                                     @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
                                         <th class="text-left"> {{ __('Charging Company') }} </th>
-                                        @if ($session->station == null &&
-                                            count($station_trashed_collection = $session->station()->withTrashed()->get()) > 0)
+                                        @if ($session->charging_companies_deleted_at == null)
                                             <td>
-                                                <a href="{{ url('/charging-companies/' . $station_trashed_collection->first()->company->id . '/view') }}">
-                                                    {{ $station_trashed_collection->first()->company->name }}
+                                                <a href="{{ url('/charging-companies/' . $session->charging_companies_id . '/view') }}">
+                                                    {{ $session->charging_companies_name }}
                                                 </a>
                                             </td>
+
                                         @else
                                             <td>
-                                                <a href="{{ url('/charging-companies/' . $session->station->company->id . '/view') }}">
-                                                    {{ $session->station->company->name }}
-                                                </a>
+                                                {{ $session->charging_companies_name . __(' (Deleted)') }}
                                             </td>
                                         @endif
                                     @endif
@@ -36,88 +34,88 @@
                                 <tr>
                                     <th class="text-left"> {{ __('Station\'s Name') }} </th>
                                     <td>
-                                        @if ($session->station == null &&
-                                            count($station_trashed_collection = $session->station()->withTrashed()->get()) > 0)
-                                            {{ __('Deleted Station') }}
-                                        @else
-                                            <a href="{{ url('/charging-stations/' . $session->station->id . '/view') }}">
-                                                {{ $session->station->name }}
+                                        @if ($session->charging_stations_deleted_at == null)
+                                            <a href="{{ url('/charging-stations/' . $session->charging_stations_id . '/view') }}">
+                                                {{ $session->charging_stations_name }}
                                             </a>
+
+                                        @else
+                                            {{ $session->charging_stations_name . __(' (Deleted)') }}
                                         @endif
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left"> {{ __('UAV\'s Id') }} </th>
+                                    <th class="text-left"> {{ __('UAV\'s Name') }} </th>
                                     <td>
-                                        @if ($session->uav == null &&
-                                            count($uav_trashed_collection = $session->uav()->withTrashed()->get()) > 0)
-                                            {{ __('Deleted UAV') }}
-                                        @else
-                                            <a href="{{ url('/uavs/' . $session->uav->id . '/view') }}">
-                                                {{ $session->uav->id }}
+                                        @if ($session->uavs_deleted_at == null)
+                                            <a href="{{ url('/uavs/' . $session->uavs_id . '/view') }}">
+                                                {{ $session->uavs_name }}
                                             </a>
+
+                                        @else
+                                            {{ $session->uavs_name . __(' (Deleted)') }}
                                         @endif
                                     </td>
                                 </tr>
-                                @if ($session->uav == null)
-                                    <tr>
-                                        <th class="text-left"> {{ __('UAV Owner\'s Email') }} </th>
-                                        <td>
-                                            @if (count($uav_trashed_collection->first()->uavOwner->uavs) != 0)
-                                                <a href="{{ url('/uav-owners/' . $uav_trashed_collection->first()->uavOwner->id . '/view') }}">
-                                                    {{ $uav_trashed_collection->first()->uavOwner->email }}
-                                                </a>
-                                            @else
-                                                {{ $uav_trashed_collection->first()->uavOwner->email }}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @else
-                                    <tr>
-                                        <th class="text-left"> {{ __('UAV Owner\'s Email') }} </th>
-                                        <td>
-                                            <a href="{{ url('/uav-owners/' . $session->uav->uavOwner->id . '/view') }}">
-                                                {{ $session->uav->uavOwner->email }}
+                                <tr>
+                                    <th class="text-left"> {{ __('UAV Owner\'s Email') }} </th>
+                                    <td>
+                                        @if ($session->uav_owners_deleted_at == null)
+                                            <a href="{{ url('/uav-owners/' . $session->uav_owners_id . '/view') }}">
+                                                {{ $session->uav_owners_email }}
                                             </a>
-                                        </td>
-                                    </tr>
-                                @endif
+                                        @else
 
-                                @if ($session->uav != null)
+                                            {{ $session->uav_owners_email . __(' (Deleted)') }}
+                                        @endif
+                                    </td>
+                                </tr>
+                                @if ($session->uavs_deleted_at == null)
                                     <tr>
                                         <th class="text-left"> {{ __('Charging Percentage') }} </th>
                                         <td>
 
-                                            @if($session->uav->charging_percentage >= 0 &&
-                                                $session->uav->charging_percentage < 25)
+                                            @if($session->uavs_charging_percentage >= 0 &&
+                                                $session->uavs_charging_percentage < 25)
+
                                                 @if($session->date_time_end == null)
                                                     <em class="fa fa-battery-quarter" id="session-view-battery-level-quarter-em"></em>
+
                                                 @else
                                                     <em class="fa fa-battery-quarter"></em>
                                                 @endif
-                                            @elseif($session->uav->charging_percentage >= 25 &&
-                                                $session->uav->charging_percentage < 50)
+
+                                            @elseif($session->uavs_charging_percentage >= 25 &&
+                                                $session->uavs_charging_percentage < 50)
+
                                                 @if($session->date_time_end == null)
                                                     <em class="fa fa-battery-half" id="session-view-battery-level-half-em"></em>
+
                                                 @else
                                                     <em class="fa fa-battery-half"></em>
                                                 @endif
-                                            @elseif($session->uav->charging_percentage >= 50 &&
-                                                $session->uav->charging_percentage < 75)
+
+                                            @elseif($session->uavs_charging_percentage >= 50 &&
+                                                $session->uavs_charging_percentage < 75)
+
                                                 @if($session->date_time_end == null)
                                                     <em class="fa fa-battery-three-quarters" id="session-view-battery-level-three-quarters-em"></em>
+
                                                 @else
                                                     <em class="fa fa-battery-three-quarters"></em>
                                                 @endif
-                                            @elseif($session->uav->charging_percentage >= 75 &&
-                                            $session->uav->charging_percentage < 100)
+
+                                            @elseif($session->uavs_charging_percentage >= 75 &&
+                                                $session->uavs_charging_percentage < 100)
+
                                                 @if($session->date_time_end == null)
                                                     <em class="fa fa-battery-full" id="session-view-battery-level-full-em"></em>
+
                                                 @else
                                                     <em class="fa fa-battery-full"></em>
                                                 @endif
                                             @endif
-                                            {{ $session->uav->charging_percentage . '%' }}
+                                            {{ $session->uavs_charging_percentage . '%' }}
                                         </td>
                                     </tr>
                                 @endif
@@ -139,7 +137,7 @@
                                 </tr>
                                 <tr>
                                     <th class="text-left"> {{ __('Cost') }} </th>
-                                    <td> {{ $session->cost->credits }} </td>
+                                    <td> {{ $session->credits }} </td>
                                 </tr>
                             </tbody>
                         </table>
