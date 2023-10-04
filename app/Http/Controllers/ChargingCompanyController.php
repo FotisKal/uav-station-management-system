@@ -207,6 +207,23 @@ class ChargingCompanyController extends Controller
             return back();
         }
 
+        $sessions_count = ChargingStation::join('charging_sessions', 'charging_stations.id', '=', 'charging_sessions.charging_station_id')
+            ->select('charging_sessions.*')
+            ->where('charging_stations.company_id', '=', $company->id)
+            ->whereNull('charging_sessions.date_time_end')
+            ->count();
+
+        if ($sessions_count > 0) {
+            $alerts[] = [
+                'message' => __('This Charging Company cannot be deleted, because it\'s in one or more Charging Sessions, right now.'),
+                'class' => __('alert bg-danger'),
+            ];
+
+            return redirect('/charging-companies')->with([
+                'alerts' => $alerts,
+            ]);
+        }
+
         $tz = 'Europe/Athens';
         $timestamp = time();
         $datetime_now = new DateTime("now", new DateTimeZone($tz));
@@ -214,16 +231,13 @@ class ChargingCompanyController extends Controller
         $datetime_now_str = $datetime_now->format('Y-m-d H:i:s');
 
         ChargingStation::join('charging_sessions', 'charging_stations.id', '=', 'charging_sessions.charging_station_id')
-//            ->join('charging_session_costs', 'charging_sessions.charging_session_cost_id ', '=', 'charging_session_costs.id')
             ->join('charging_companies', 'charging_stations.company_id', '=', 'charging_companies.id')
             ->join('uavs', 'charging_stations.company_id', '=', 'uavs.company_id')
             ->join('users', 'charging_stations.company_id', '=', 'users.company_id')
-//            ->select('charging_stations.deleted_at', 'charging_sessions.deleted_at, charging_session_costs.deleted_at, uavs.deleted_at')
             ->select('charging_stations.deleted_at', 'charging_sessions.deleted_at, uavs.deleted_at, users.deleted_at')
             ->where('charging_stations.company_id', $company->id)
             ->update([
                     'charging_stations.deleted_at' => $datetime_now_str,
-                    'charging_sessions.deleted_at' => $datetime_now_str,
                     'charging_companies.deleted_at' => $datetime_now_str,
                     'uavs.deleted_at' => $datetime_now_str,
                     'users.deleted_at' => $datetime_now_str,
