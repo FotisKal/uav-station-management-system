@@ -6,11 +6,13 @@ use App\Uavsms\Uav\Uav;
 use App\UserRole;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 use Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UavOwner extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *

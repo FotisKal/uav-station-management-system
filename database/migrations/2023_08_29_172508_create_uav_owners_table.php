@@ -20,6 +20,7 @@ class CreateUavOwnersTable extends Migration
             $table->bigInteger('msisdn')->index();
             $table->float('credits');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
