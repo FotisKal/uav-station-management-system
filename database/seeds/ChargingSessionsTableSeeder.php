@@ -12,16 +12,42 @@ class ChargingSessionsTableSeeder extends Seeder
      */
     public function run()
     {
+        $data = [];
+
+        /* Create Data for the first batch of Charging Stations and Uavs. They belong to the first Charging Company. */
+        $data[] = self::createData(1, 12, 1, 17);
+        /* Create Data for the second batch of Charging Stations and Uavs. They belong to the second Charging Company. */
+        $data[] = self::createData(13, 24, 18, 29);
+        
+        foreach ($data as $array) {
+            foreach ($array as $v) {
+                $session = new ChargingSession();
+
+                $session->charging_station_id = $v['charging_station_id'];
+                $session->uav_id = $v['uav_id'];
+                $session->date_time_start = $v['date_time_start'];
+                $session->date_time_end = $v['date_time_end'];
+                $session->estimated_date_time_end = $v['estimated_date_time_end'];
+                $session->kw_spent = $v['kw_spent'];
+                $session->charging_session_cost_id = $v['charging_session_cost_id'];
+
+                $session->save();
+            }
+        }
+    }
+
+    public function createData($station_id_min, $station_id_max, $uav_id_min, $uav_id_max)
+    {
         $station_ids = [];
         $uav_ids = [];
         $data = [];
 
 
-        for ($i = 1; $i < 13; $i++) {
+        for ($i = $station_id_min; $i <= $station_id_max; $i++) {
             $station_ids[] = $i;
         }
 
-        for ($i = 1; $i < 18; $i++) {
+        for ($i = $uav_id_min; $i <= $uav_id_max; $i++) {
             $uav_ids[] = $i;
         }
 
@@ -67,18 +93,6 @@ class ChargingSessionsTableSeeder extends Seeder
             }
         }
 
-        foreach ($data as $v) {
-            $session = new ChargingSession();
-
-            $session->charging_station_id = $v['charging_station_id'];
-            $session->uav_id = $v['uav_id'];
-            $session->date_time_start = $v['date_time_start'];
-            $session->date_time_end = $v['date_time_end'];
-            $session->estimated_date_time_end = $v['estimated_date_time_end'];
-            $session->kw_spent = $v['kw_spent'];
-            $session->charging_session_cost_id = $v['charging_session_cost_id'];
-
-            $session->save();
-        }
+        return $data;
     }
 }
