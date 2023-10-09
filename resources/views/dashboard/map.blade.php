@@ -13,11 +13,15 @@
     map.addLayer(markers);
 
     @foreach($stations as $station)
+
+    @if ($station->position_json != null)
         var lat = {{ $station->position_json['x'] }};
         var lon = {{ $station->position_json['y'] }};
         var position = new OpenLayers.LonLat(lon, lat).transform(fromProjection, toProjection);
 
         markers.addMarker(new OpenLayers.Marker(position));
+    @endif
+
     @endforeach
 
     var zoom = 5;
