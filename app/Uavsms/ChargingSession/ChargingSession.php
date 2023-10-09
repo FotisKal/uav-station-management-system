@@ -61,7 +61,7 @@ class ChargingSession extends Model
         }
 
         if (!empty($search['station_id'])) {
-            $query->where('charging_station_id', 'LIKE', '%' . $search['station_id'] . '%');
+            $query->where('charging_station_id', $search['station_id']);
         }
 
         if (!empty($search['company_id'])) {
