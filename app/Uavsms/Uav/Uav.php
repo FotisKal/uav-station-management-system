@@ -82,10 +82,6 @@ class Uav extends Model
      */
     public function scopeJoinedOwnerFilter($query, $search)
     {
-        if (!empty($search['company_id'])) {
-            $query->where('company_id', 'LIKE', '%' . $search['company_id'] . '%');
-        }
-
         if (!empty($search['email'])) {
             $query->where('email', 'LIKE', '%' . $search['email'] . '%');
         }
