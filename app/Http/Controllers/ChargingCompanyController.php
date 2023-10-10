@@ -36,6 +36,7 @@ class ChargingCompanyController extends Controller
             'selected_menu' => MainMenu::CHARGING_COMPANIES,
             'token' => $token,
             'companies' => $companies,
+            'search' => $search,
         ]);
     }
 

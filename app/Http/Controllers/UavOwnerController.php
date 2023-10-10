@@ -61,6 +61,7 @@ class UavOwnerController extends Controller
             'owners' => $owners,
             'emails' => $emails,
             'names' => $names,
+            'search' => $search,
         ]);
     }
 

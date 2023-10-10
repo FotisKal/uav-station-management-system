@@ -18,7 +18,7 @@
                         @if(\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
                             <div class="col-8 col-md-8 col-lg-8 col-xl-4">
                                 <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
-                                {!! selectbox('company_id', 'company_id', $names, 0) !!}
+                                {!! selectbox('company_id', 'company_id', $names, @$search['company_id']) !!}
                             </div>
                         @endif
                         <div class="col-4 col-md-4 col-lg-4 col-xl-2">
@@ -27,11 +27,11 @@
                         </div>
                         <div class="col-8 col-md-8 col-lg-8 col-xl-4">
                             <label for="position_type_id" class="col-form-label"> {{ __('Position Types') }}: </label>
-                            {!! selectbox('position_type_id', 'position_type_id', $position_types, 0) !!}
+                            {!! selectbox('position_type_id', 'position_type_id', $position_types, @$search['position_type_id']) !!}
                         </div>
                         <div class="col-3 col-md-3 col-lg-3 col-xl-3">
                             <label for="status" class="col-form-label"> {{ __('Status') }}: </label>
-                            {!! selectbox('status', 'status', $statuses, '0') !!}
+                            {!! selectbox('status', 'status', $statuses, @$search['status']) !!}
                         </div>
                     </div>
                 </div>

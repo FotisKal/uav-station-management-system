@@ -16,33 +16,29 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-3 col-md-3 col-lg-3 col-xl-3">
-                            <label for="name" class="col-form-label"> {{ __('Name') }}: </label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ @$search['name'] }}">
-                        </div>
-                        <div class="col-3 col-md-3 col-lg-3 col-xl-3">
                             <label for="station_id" class="col-form-label"> {{ __('Charging Stations') }}: </label>
-                            {!! selectbox('station_id', 'station_id', $station_names, 0) !!}
+                            {!! selectbox('station_id', 'station_id', $station_names, @$search['station_id']) !!}
                         </div>
                         @if (\Illuminate\Support\Facades\Auth::user()->role_id == \App\UserRole::ADMINISTRATOR_ID)
                             <div class="col-3 col-md-3 col-lg-3 col-xl-3">
                                 <label for="company_id" class="col-form-label"> {{ __('Companies') }}: </label>
-                                    {!! selectbox('company_id', 'company_id', $companies_names, 0) !!}
+                                    {!! selectbox('company_id', 'company_id', $companies_names, @$search['company_id']) !!}
                             </div>
                         @endif
                         <div class="col-3 col-md-3 col-lg-3 col-xl-3">
                             <label for="user_id" class="col-form-label"> {{ __('Uav Owners\' Emails') }}: </label>
-                            {!! selectbox('user_id', 'user_id', $emails, 0) !!}
+                            {!! selectbox('user_id', 'user_id', $emails, @$search['user_id']) !!}
                         </div>
                         <div class="col-3 col-md-3 col-lg-3 col-xl-3 date">
                             <label for="date_start" class="col-form-label"> {{ __('Date Start') }}: </label>
-                            <input type="date" name="date_start" id="date_start" class="form-control">
+                            <input type="date" name="date_start" id="date_start" class="form-control" value="{!! @$search['date_start'] !!}">
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
                         </div>
                         <div class="col-3 col-md-3 col-lg-3 col-xl-3 date">
                             <label for="date_end" class="col-form-label"> {{ __('Date End') }}: </label>
-                            <input type="date" name="date_end" id="date_end" class="form-control">
+                            <input type="date" name="date_end" id="date_end" class="form-control" value="{!! @$search['date_end'] !!}">
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>

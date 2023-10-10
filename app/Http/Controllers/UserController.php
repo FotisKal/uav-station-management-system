@@ -86,6 +86,7 @@ class UserController extends Controller
             'users' => $users,
             'type' => $type,
             'names' => $names,
+            'search' => $search,
         ]);
     }
 

@@ -65,6 +65,7 @@ class UavController extends Controller
                 'charging' =>__('Charging'),
                 'completed' => __('Completed')
             ],
+            'search' => $search,
         ]);
     }
 
