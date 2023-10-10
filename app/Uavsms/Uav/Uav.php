@@ -46,7 +46,7 @@ class Uav extends Model
     public function scopeFilter($query, $search)
     {
         if (!empty($search['company_id'])) {
-            $query->where('company_id', 'LIKE', '%' . $search['company_id'] . '%');
+            $query->where('company_id', $search['company_id']);
         }
 
         if (!empty($search['name'])) {
@@ -54,7 +54,7 @@ class Uav extends Model
         }
 
         if (!empty($search['user_id'])) {
-            $query->where('owner_id', 'LIKE', '%' . $search['user_id'] . '%');
+            $query->where('owner_id', $search['user_id']);
         }
 
         if (!empty($search['status'])) {
