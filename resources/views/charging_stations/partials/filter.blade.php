@@ -29,6 +29,10 @@
                             <label for="position_type_id" class="col-form-label"> {{ __('Position Types') }}: </label>
                             {!! selectbox('position_type_id', 'position_type_id', $position_types, 0) !!}
                         </div>
+                        <div class="col-3 col-md-3 col-lg-3 col-xl-3">
+                            <label for="status" class="col-form-label"> {{ __('Status') }}: </label>
+                            {!! selectbox('status', 'status', $statuses, '0') !!}
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

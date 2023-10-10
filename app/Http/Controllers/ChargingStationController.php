@@ -32,7 +32,7 @@ class ChargingStationController extends Controller
         if ($user->role_id == UserRole::ADMINISTRATOR_ID) {
             $stations = ChargingStation::filter($search)
                 ->with('company')
-                ->orderBy('id')
+                ->orderBy('charging_stations.id')
                 ->paginate(PerPage::get());
 
             $names = ChargingCompany::namesToList(true);
@@ -40,7 +40,7 @@ class ChargingStationController extends Controller
         } else if ($user->role_id == UserRole::SIMPLE_USER_ID) {
             $stations = ChargingStation::filter($search)
                 ->where('company_id', $user->company_id)
-                ->orderBy('id')
+                ->orderBy('charging_stations.id')
                 ->paginate(PerPage::get());
 
             $names = null;
@@ -57,6 +57,11 @@ class ChargingStationController extends Controller
             'stations' => $stations,
             'names' => $names,
             'position_types' => PositionType::ToList(true),
+            'statuses' => [
+                __('Select Status'),
+                'charging' =>__('Charging'),
+                'completed' => __('Completed')
+            ],
         ]);
     }
 
