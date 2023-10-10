@@ -57,6 +57,18 @@ class Uav extends Model
             $query->where('owner_id', 'LIKE', '%' . $search['user_id'] . '%');
         }
 
+        if (!empty($search['status'])) {
+            if ($search['status'] == 'charging') {
+                $query->join('charging_sessions', 'uavs.id', '=', 'charging_sessions.id')
+                    ->whereNull('charging_sessions.date_time_end');
+            }
+
+            if ($search['status'] == 'completed') {
+                $query->join('charging_sessions', 'uavs.id', '=', 'charging_sessions.id')
+                    ->whereNotNull('charging_sessions.date_time_end');
+            }
+        }
+
         if (!empty($search['search'])) {
             $query->where('id', is_numeric($search['search']) ? $search['search'] : -1)
                 ->orWhere('name', 'LIKE', '%' . $search['search'] . '%');

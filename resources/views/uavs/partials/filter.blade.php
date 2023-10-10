@@ -29,6 +29,10 @@
                             <label for="user_id" class="col-form-label"> {{ __('Owners\' Emails') }}: </label>
                             {!! selectbox('user_id', 'user_id', $emails, 0) !!}
                         </div>
+                        <div class="col-3 col-md-3 col-lg-3 col-xl-3">
+                            <label for="status" class="col-form-label"> {{ __('Status') }}: </label>
+                            {!! selectbox('status', 'status', $statuses, '0') !!}
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

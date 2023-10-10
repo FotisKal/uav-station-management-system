@@ -32,7 +32,7 @@ class UavController extends Controller
             $uavs_with_owners_paginator = Uav::filter($search)
                 ->with('uavOwner')
                 ->with('company')
-                ->orderBy('id')
+                ->orderBy('uavs.id')
                 ->paginate(PerPage::get());
 
             $names = ChargingCompany::namesToList(true);
@@ -41,7 +41,7 @@ class UavController extends Controller
             $uavs_with_owners_paginator = Uav::filter($search)
                 ->where('company_id', $user->company_id)
                 ->with('uavOwner')
-                ->orderBy('id')
+                ->orderBy('uavs.id')
                 ->paginate(PerPage::get());
 
             $names = null;
@@ -60,6 +60,11 @@ class UavController extends Controller
             'uavs' => $uavs_with_owners_paginator,
             'emails' => $emails,
             'names' => $names,
+            'statuses' => [
+                __('Select Status'),
+                'charging' =>__('Charging'),
+                'completed' => __('Completed')
+            ],
         ]);
     }
 
