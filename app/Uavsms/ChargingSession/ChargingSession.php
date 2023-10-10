@@ -86,6 +86,16 @@ class ChargingSession extends Model
             $query->where('date_time_end', '<=', $search['date_end']);
         }
 
+        if (!empty($search['status'])) {
+            if ($search['status'] == 'charging') {
+                $query->whereNull('date_time_end');
+            }
+
+            if ($search['status'] == 'completed') {
+                $query->whereNotNull('date_time_end');
+            }
+        }
+
         if (!empty($search['search'])) {
             $query->where('id', is_numeric($search['search']) ? $search['search'] : -1)
                 ->orWhere('name', 'LIKE', '%' . $search['search'] . '%');

@@ -67,6 +67,12 @@ class ChargingSessionController extends Controller
             'station_names' => ChargingStation::namesToList(true),
             'companies_names' => $companies_names,
             'emails' => UavOwner::emailsToList(true),
+            'statuses' => [
+                __('Select Status'),
+                'charging' =>__('Charging'),
+                'completed' => __('Completed')
+            ],
+            'search' => $search,
         ]);
     }
 
